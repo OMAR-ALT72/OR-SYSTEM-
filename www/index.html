@@ -1,0 +1,2104 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline';">
+<title>OR SYSTEM</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',Arial,Helvetica,sans-serif;background:#0d1117;min-height:100vh;color:#c9d1d9}
+.header{background:#161b22;padding:20px 40px;border-bottom:3px solid #e94560;display:flex;justify-content:space-between;align-items:center;box-shadow:0 2px 10px rgba(0,0,0,0.3)}
+.logo{font-size:32px;font-weight:900;color:#e94560;letter-spacing:4px}
+.subtitle{font-size:13px;color:#8b949e;margin-top:4px}
+.main{padding:25px 40px;max-width:1600px;margin:0 auto}
+.toolbar{display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap;align-items:center}
+.btn{padding:10px 20px;border:none;border-radius:6px;cursor:pointer;font-size:13px;font-weight:700;transition:all 0.2s;display:inline-flex;align-items:center;gap:6px;direction:ltr;position:relative;overflow:hidden}
+.btn:hover{transform:translateY(-1px);opacity:0.9;box-shadow:0 4px 12px rgba(0,0,0,0.2)}
+.btn:active{transform:translateY(0)}
+.btn-red{background:#e94560;color:white}
+.btn-green{background:#00b894;color:white}
+.btn-blue{background:#0984e3;color:white}
+.btn-yellow{background:#fdcb6e;color:#2d3436}
+.btn-gray{background:#636e72;color:white}
+.btn-purple{background:#6c5ce7;color:white}
+.btn-lang{background:#21262d;border:2px solid #e94560;color:#e94560;padding:8px 16px;font-size:12px;border-radius:6px;cursor:pointer;font-weight:700;transition:all 0.2s}
+.btn-lang:hover{background:#e94560;color:white}
+.search-box{display:flex;gap:8px;align-items:center}
+.search-input{padding:10px 16px;border:2px solid #30363d;border-radius:6px;background:#21262d;color:#c9d1d9;font-size:13px;width:280px;transition:border-color 0.2s}
+.search-input:focus{outline:none;border-color:#e94560;box-shadow:0 0 0 3px rgba(233,69,96,0.1)}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:15px;margin-bottom:20px}
+.stat{background:#161b22;border-radius:10px;padding:18px;border:1px solid #30363d;transition:transform 0.2s,box-shadow 0.2s}
+.stat:hover{transform:translateY(-2px);box-shadow:0 4px 15px rgba(0,0,0,0.2)}
+.stat h4{font-size:11px;color:#8b949e;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}
+.stat .num{font-size:28px;font-weight:700;color:#e94560}
+.months{display:flex;gap:6px;margin-bottom:18px;overflow-x:auto;padding:4px 0}
+.mtab{padding:8px 16px;border:2px solid #30363d;border-radius:6px;background:#161b22;color:#8b949e;cursor:pointer;transition:all 0.2s;white-space:nowrap;font-weight:700;font-size:12px}
+.mtab:hover{border-color:#e94560;color:#e94560}
+.mtab.active{background:#e94560;border-color:#e94560;color:white;box-shadow:0 2px 8px rgba(233,69,96,0.3)}
+.table-wrap{background:#161b22;border-radius:10px;border:1px solid #30363d;overflow:hidden}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th{background:#0d1117;color:#58a6ff;padding:12px 10px;text-align:center;font-weight:700;text-transform:uppercase;font-size:10px;letter-spacing:1px;border-bottom:2px solid #58a6ff;white-space:nowrap}
+td{padding:10px;border-bottom:1px solid #30363d;color:#b0b8c4;text-align:center}
+tr:hover{background:#21262d}
+tr:hover td{color:#fff}
+.empty{text-align:center;padding:50px 20px;color:#666}
+.empty h3{font-size:18px;margin-bottom:8px;color:#8b949e}
+.pagination{display:flex;justify-content:center;gap:8px;padding:15px;border-top:1px solid #30363d;background:#0d1117}
+.page-btn{padding:6px 12px;border:1px solid #30363d;border-radius:4px;background:#161b22;color:#8b949e;cursor:pointer;font-size:12px;font-weight:700;transition:all 0.2s}
+.page-btn:hover{border-color:#e94560;color:#e94560}
+.page-btn.active{background:#e94560;border-color:#e94560;color:white}
+.page-btn:disabled{opacity:0.3;cursor:not-allowed}
+.modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:#000000cc;z-index:1000;justify-content:center;align-items:center;padding:20px;overflow-y:auto;backdrop-filter:blur(4px)}
+.modal.show{display:flex}
+.modal-box{background:#161b22;border-radius:12px;border:1px solid #e94560;width:100%;max-width:1000px;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,0.5)}
+.modal-head{padding:20px 25px;border-bottom:2px solid #e94560;display:flex;justify-content:space-between;align-items:center;background:#0d1117}
+.modal-head h2{color:#e94560;font-size:20px}
+.modal-close{background:none;border:none;color:#8b949e;font-size:24px;cursor:pointer;transition:color 0.2s}
+.modal-close:hover{color:#e94560}
+.modal-body{padding:25px}
+.modal-foot{padding:15px 25px;border-top:1px solid #30363d;display:flex;justify-content:flex-end;gap:10px;background:#0d1117}
+.form-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:15px;margin-bottom:15px}
+.form-group{display:flex;flex-direction:column;gap:6px}
+.form-group.full{grid-column:1/-1}
+.form-group label{font-size:11px;font-weight:700;color:#8b949e;text-transform:uppercase;letter-spacing:1px}
+.form-group input,.form-group select,.form-group textarea{padding:10px 14px;border:2px solid #30363d;border-radius:6px;background:#0d1117;color:#c9d1d9;font-size:13px;font-family:inherit;transition:border-color 0.2s}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{outline:none;border-color:#e94560;box-shadow:0 0 0 3px rgba(233,69,96,0.1)}
+.form-group input[readonly]{background:#21262d;color:#8b949e}
+.items-section{margin-top:20px;padding-top:20px;border-top:1px solid #30363d}
+.items-section h3{color:#e94560;margin-bottom:12px;font-size:15px}
+.item-row{display:grid;grid-template-columns:50px 1.2fr 80px 90px 80px 90px 90px 90px 40px;gap:8px;align-items:center;margin-bottom:8px;padding:8px;background:#0d1117;border-radius:6px;border:1px solid #30363d}
+.item-row.header{background:#21262d;font-weight:700;font-size:10px;color:#58a6ff;text-transform:uppercase}
+.item-row input{padding:6px 8px;border:1px solid #30363d;border-radius:4px;background:#0d1117;color:#c9d1d9;font-size:12px;width:100%;box-sizing:border-box}
+.item-row textarea{padding:6px 8px;border:1px solid #30363d;border-radius:4px;background:#0d1117;color:#c9d1d9;font-size:12px;width:100%;box-sizing:border-box;resize:vertical;min-height:50px;font-family:inherit}
+.item-row textarea:focus{outline:none;border-color:#e94560}
+.item-row input:focus{outline:none;border-color:#e94560}
+.item-row select{width:100%;box-sizing:border-box}
+.item-row .item-num{color:#e94560;font-weight:700;text-align:center}
+/* Code and Description: LTR, left-aligned */
+.item-row input.code-input,.item-row input.desc-input{direction:ltr;text-align:left;font-family:inherit;font-size:12px}
+/* Center-aligned fields */
+.item-row input.center-input,.item-row select.center-select{text-align:center}
+.item-row .item-num{text-align:center}
+.item-block{background:#0d1117;border:1px solid #30363d;border-radius:6px;margin-bottom:8px;overflow:hidden}
+.desc-row{display:flex;align-items:flex-start;gap:10px;padding:8px 12px;border-top:1px solid #30363d;background:#161b22}
+.desc-label{font-size:11px;font-weight:700;color:#58a6ff;text-transform:uppercase;letter-spacing:1px;white-space:nowrap;padding-top:8px;min-width:80px}
+.desc-field{flex:1}
+.desc-select option{background:#0d1117;color:#c9d1d9}
+.desc-select option:hover{background:#e94560}
+.desc-select:focus{outline:none;border-color:#e94560}
+[dir="rtl"] .desc-row{flex-direction:row-reverse}
+[dir="rtl"] .desc-label{text-align:right}
+.btn-remove{padding:4px 8px;border:none;border-radius:4px;background:#d63031;color:white;cursor:pointer;font-size:12px}
+.btn-remove:hover{opacity:0.8}
+.btn-add{padding:8px 16px;border:2px dashed #e94560;border-radius:6px;background:transparent;color:#e94560;cursor:pointer;font-size:13px;font-weight:700;transition:all 0.2s;width:100%;margin-top:10px}
+.btn-add:hover{background:#e945601a}
+.approvals-grid{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:15px;margin-top:20px;padding-top:20px;border-top:1px solid #30363d}
+.toast{position:fixed;bottom:20px;padding:12px 20px;border-radius:6px;color:white;font-size:13px;font-weight:700;z-index:2000;transform:translateY(100px);transition:transform 0.3s,opacity 0.3s;opacity:0;box-shadow:0 4px 12px rgba(0,0,0,0.3)}
+.toast.show{transform:translateY(0);opacity:1}
+.toast-success{background:#00b894}
+.toast-error{background:#d63031}
+.toast-info{background:#0984e3}
+.a4-preview{background:#f0f0f0;padding:20px;border-radius:8px;overflow:auto;max-height:400px}
+.a4-page{width:210mm;min-height:297mm;padding:15mm;margin:0 auto;background:white;color:black;font-family:Arial,sans-serif;font-size:11pt;line-height:1.4;direction:rtl;text-align:right;box-shadow:0 0 10px rgba(0,0,0,0.1)}
+[dir="rtl"] .search-box{margin-right:auto}
+[dir="ltr"] .search-box{margin-left:auto}
+[dir="rtl"] .form-group input,[dir="rtl"] .form-group select,[dir="rtl"] .form-group textarea{direction:rtl;text-align:right}
+[dir="ltr"] .form-group input,[dir="ltr"] .form-group select,[dir="ltr"] .form-group textarea{direction:ltr;text-align:left}
+[dir="rtl"] .search-input{direction:rtl}
+[dir="ltr"] .search-input{direction:ltr}
+[dir="rtl"] .toast{left:20px;right:auto}
+[dir="ltr"] .toast{right:20px;left:auto}
+[dir="rtl"] .item-row input{direction:rtl;text-align:right}
+[dir="ltr"] .item-row input{direction:ltr;text-align:left}
+@media print{@page{margin:0;size:auto}html,body{margin:0;padding:0}body{background:white;color:black}.header,.toolbar,.months,.stats,.btn,.pagination{display:none!important}.table-wrap{border:1px solid #ccc;background:white}th{background:#f0f0f0;color:#333;border-bottom:2px solid #333}td{color:#333;border-bottom:1px solid #ddd}}
+@media(max-width:768px){.form-grid{grid-template-columns:1fr}.item-row{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,1fr)}.toolbar{flex-direction:column;align-items:stretch}.search-box{margin:0!important;width:100%}.search-input{width:100%}}
+</style>
+</head>
+<body>
+<div class="header">
+<div>
+<div class="logo" data-i18n="systemName">OR SYSTEM</div>
+<div class="subtitle" data-i18n="subtitle">نظام طلبيات المواد - مصانع الحديد والصلب</div>
+</div>
+<div style="display:flex;align-items:center;gap:15px">
+<button class="btn-lang" id="langToggle">EN</button>
+<div style="text-align:left">
+<div style="font-size:13px;color:#8b949e" data-i18n="currentDate">التاريخ الحالي</div>
+<div id="curDate" style="font-size:16px;font-weight:700;color:#e94560"></div>
+</div>
+</div>
+</div>
+
+<div class="main">
+<div class="toolbar">
+<button class="btn btn-red" id="btnAddReq">
+<svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16"><path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/></svg>
+<span data-i18n="addReq">+ إضافة طلبية</span>
+</button>
+<button class="btn btn-green" id="btnSave">
+<svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16"><path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/><path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/></svg>
+<span data-i18n="save">حفظ</span>
+</button>
+<button class="btn btn-blue" id="btnImport">
+<svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16"><path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/><path d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 1-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708l3-3z"/></svg>
+<span data-i18n="import">استيراد</span>
+</button>
+
+<button class="btn btn-yellow" id="btnClear">
+<svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16"><path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/><path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/></svg>
+<span data-i18n="clearAll">مسح الكل</span>
+</button>
+<button class="btn btn-gray" id="btnPrint">
+<svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16"><path d="M2.5 8a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1z"/><path d="M5 1a2 2 0 0 0-2 2v2H2a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h1v1a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-1h1a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-1V3a2 2 0 0 0-2-2H5zM4 3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2H4V3zm1 5a2 2 0 0 0-2 2v1H2a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v-1a2 2 0 0 0-2-2H5zm7 2v3a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1z"/></svg>
+<span data-i18n="print">طباعة</span>
+</button>
+<div class="search-box">
+<input type="text" class="search-input" id="searchInput" data-i18n-placeholder="searchPlaceholder" placeholder="بحث برقم OR، الكود، الوصف...">
+</div>
+</div>
+
+<div class="stats">
+<div class="stat"><h4 data-i18n="totalReq">إجمالي الطلبيات</h4><div class="num" id="totalRecords">0</div></div>
+<div class="stat"><h4 data-i18n="thisMonth">هذا الشهر</h4><div class="num" id="totalMonth">0</div></div>
+<div class="stat"><h4 data-i18n="totalItems">إجمالي الأصناف</h4><div class="num" id="totalItems">0</div></div>
+<div class="stat"><h4 data-i18n="pending">بانتظار الموافقة</h4><div class="num" id="totalPending">0</div></div>
+</div>
+
+<div class="months" id="monthSelector"></div>
+
+<div class="table-wrap">
+<table id="dataTable">
+<thead><tr>
+<th>#</th>
+<th data-i18n="orNumber">رقم OR</th>
+<th data-i18n="issueDate">تاريخ الإصدار</th>
+<th data-i18n="costCenter">مركز التكلفة</th>
+<th data-i18n="items">الأصناف</th>
+<th data-i18n="originator">المُعد</th>
+<th data-i18n="status">الحالة</th>
+<th data-i18n="reqType">النوع</th>
+<th data-i18n="actions">الإجراءات</th>
+</tr></thead>
+<tbody id="tableBody"></tbody>
+</table>
+<div class="empty" id="emptyState">
+<svg fill="currentColor" viewBox="0 0 16 16" style="width:60px;height:60px;margin-bottom:15px;opacity:0.3"><path d="M4 1.5a.5.5 0 0 1 .5.5v2.5h1.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5v-3a.5.5 0 0 1 .5-.5z"/><path d="M4.5 1A1.5 1.5 0 0 0 3 2.5v10.32a1.5 1.5 0 0 0 1.5 1.5h7a1.5 1.5 0 0 0 1.5-1.5V2.5A1.5 1.5 0 0 0 11.5 1h-7zM5 3h6v1H5V3z"/></svg>
+<h3 data-i18n="noReqFound">لا توجد طلبيات</h3>
+<p data-i18n="clickAdd">اضغط "+ إضافة طلبية" لإنشاء أول طلبية.</p>
+</div>
+<div class="pagination" id="pagination"></div>
+</div>
+</div>
+
+<!-- Add/Edit Modal -->
+<div class="modal" id="modalOverlay">
+<div class="modal-box">
+<div class="modal-head">
+<h2 id="modalTitle" data-i18n="addNewReq">إضافة طلبية جديدة</h2>
+<button class="modal-close" id="modalCloseBtn">&times;</button>
+</div>
+<div class="modal-body">
+<form id="recordForm">
+<div class="form-grid">
+<div class="form-group">
+<label data-i18n="orNumberAuto">رقم OR (تلقائي)</label>
+<input type="text" id="orNumberFull" value="" placeholder="OR-001-07-26" style="padding:10px 14px;border:2px solid #30363d;border-radius:6px;background:#0d1117;color:#c9d1d9;font-size:13px;width:100%;font-family:monospace;letter-spacing:1px;" required>
+</div>
+<div class="form-group">
+<label data-i18n="issueDate">تاريخ الإصدار</label>
+<input type="date" id="issueDate" required>
+</div>
+<div class="form-group">
+<label data-i18n="costCenter">مركز التكلفة</label>
+<input type="text" id="costCenter" value="00310-009-025" data-i18n-placeholder="costCenterEx" placeholder="مثال: 00310-009-025">
+</div>
+<div class="form-group">
+<label data-i18n="stNumber">رقم ST (اختياري)</label>
+<input type="text" id="stNumber" placeholder="ST/...">
+</div>
+<div class="form-group">
+<label>TS-09</label>
+<input type="text" id="tsNumber" placeholder="TS-09...">
+</div>
+<div class="form-group">
+<label>TS-Ref</label>
+<input type="text" id="tsRef" placeholder="TS-Ref...">
+</div>
+<div class="form-group full">
+<label data-i18n="originator">المُعد</label>
+<div style="position:relative"><input type="text" id="originator" list="originatorList" value="" data-i18n-placeholder="enterOriginator" placeholder="أدخل اسم المُعد..." style="padding:10px 14px;border:2px solid #30363d;border-radius:6px;background:#0d1117;color:#c9d1d9;font-size:13px;font-family:inherit;width:100%;" autocomplete="off"><datalist id="originatorList"></datalist></div>
+</div>
+<div class="form-group full">
+<label data-i18n="reqType">نوع الطلبية</label>
+<div style="display:flex;gap:20px;align-items:center;padding:10px 14px;border:2px solid #30363d;border-radius:6px;background:#0d1117;">
+<label style="display:flex;align-items:center;gap:8px;cursor:pointer;color:#c9d1d9;font-size:13px;text-transform:none;letter-spacing:0;font-weight:400;">
+<input type="radio" name="reqType" value="material" checked style="cursor:pointer;width:16px;height:16px;">
+<span data-i18n="materialReqType">MATERIAL REQUISITION</span>
+</label>
+<label style="display:flex;align-items:center;gap:8px;cursor:pointer;color:#c9d1d9;font-size:13px;text-transform:none;letter-spacing:0;font-weight:400;">
+<input type="radio" name="reqType" value="emergency" style="cursor:pointer;width:16px;height:16px;">
+<span data-i18n="emergencyReqType">EMERGENCY PURCHASE REQUISITION</span>
+</label>
+</div>
+</div>
+</div>
+
+<div class="items-section">
+<h3 data-i18n="items">الأصناف</h3>
+<div id="itemsContainer">
+<div class="item-row header">
+<div class="item-num" style="text-align:center">#</div>
+<div data-i18n="code" style="text-align:center">الكود</div>
+<div data-i18n="unit" style="text-align:center">الوحدة</div>
+<div data-i18n="approxValue" style="text-align:center">Approx Value</div>
+<div data-i18n="qty" style="text-align:center">الكمية</div>
+<div data-i18n="install" style="text-align:center">INSTALL</div>
+<div data-i18n="repair" style="text-align:center">إصلاح</div>
+<div data-i18n="spec" style="text-align:center">مواصفات</div>
+<div></div>
+</div>
+</div>
+<button type="button" class="btn-add" id="btnAddItem" data-i18n="addItem">+ إضافة صنف</button>
+</div>
+
+<div class="form-group full" style="margin-top:20px;padding-top:20px;border-top:1px solid #30363d">
+<label data-i18n="notes">ملاحظات</label>
+<textarea id="notes" rows="4" placeholder="اكتب الملاحظات هنا..." style="padding:10px 14px;border:2px solid #30363d;border-radius:6px;background:#0d1117;color:#c9d1d9;font-size:13px;font-family:inherit;resize:vertical;min-height:80px;"></textarea>
+</div>
+
+<div class="approvals-grid">
+<div class="form-group">
+<label data-i18n="managerApproval">موافقة المدير</label>
+<input type="text" id="managerName" data-i18n-placeholder="managerName" placeholder="اسم المدير...">
+</div>
+<div class="form-group">
+<label data-i18n="gmApproval">موافقة المدير العام</label>
+<input type="text" id="gmName" data-i18n-placeholder="gmName" placeholder="اسم المدير العام...">
+</div>
+<div class="form-group">
+<label data-i18n="director">مدير المستخدم</label>
+<input type="text" id="directorName" data-i18n-placeholder="directorName" placeholder="اسم المدير...">
+</div>
+<div class="form-group">
+<label data-i18n="status">الحالة</label>
+<select id="status">
+<option value="pending" data-i18n="pendingOpt">بانتظار الموافقة</option>
+<option value="approved" data-i18n="approvedOpt">تمت الموافقة</option>
+<option value="rejected" data-i18n="rejectedOpt">مرفوض</option>
+</select>
+
+<div class="form-grid" style="margin-top:15px;padding-top:15px;border-top:1px solid #30363d">
+<div class="form-group full">
+<label>رفعت هذه الطلبية بناءاً على</label>
+<div style="position:relative"><input type="text" id="requestedByDept" list="requestedByDeptList" placeholder="مثال: المسطحة، الصيانة، الإنتاج..." style="padding:10px 14px;border:2px solid #30363d;border-radius:6px;background:#0d1117;color:#c9d1d9;font-size:13px;font-family:inherit;width:100%;" autocomplete="off"><datalist id="requestedByDeptList"></datalist></div>
+</div>
+<div class="form-group full">
+<label>المرفقات</label>
+<input type="text" id="attachments" placeholder="اكتب المرفقات هنا...">
+</div>
+</div>
+</div>
+</div>
+</form>
+</div>
+<div class="modal-foot">
+<button class="btn btn-gray" id="btnCancel" data-i18n="cancel">إلغاء</button>
+<button class="btn btn-green" id="btnSaveRecord" data-i18n="save">حفظ</button>
+<button class="btn btn-purple" id="btnPreview" data-i18n="preview">معاينة</button>
+<button class="btn btn-blue" id="btnExportWord" data-i18n="exportWord">تصدير Word</button>
+</div>
+</div>
+</div>
+
+<!-- Preview Modal -->
+<div class="modal" id="previewModal">
+<div class="modal-box" style="max-width:950px">
+<div class="modal-head">
+<h2 data-i18n="a4Preview">معاينة A4</h2>
+<button class="modal-close" id="previewCloseBtn">&times;</button>
+</div>
+<div class="modal-body">
+<div class="a4-preview">
+<div class="a4-page" id="a4PreviewContent"></div>
+</div>
+</div>
+<div class="modal-foot">
+<button class="btn btn-gray" id="previewClose" data-i18n="close">إغلاق</button>
+<button class="btn btn-green" id="previewPrint" data-i18n="print">طباعة</button>
+</div>
+</div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ===== CAPACITOR NATIVE BRIDGE (with browser/Electron fallback) =====
+var CapPlugins = (typeof window.Capacitor !== 'undefined' && window.Capacitor.Plugins) ? window.Capacitor.Plugins : null;
+var isNative = !!CapPlugins;
+
+function blobToBase64(blob) {
+    return new Promise(function(resolve, reject) {
+        var reader = new FileReader();
+        reader.onloadend = function() {
+            var dataUrl = reader.result;
+            resolve(dataUrl.substring(dataUrl.indexOf(',') + 1));
+        };
+        reader.onerror = reject;
+        reader.readAsDataURL(blob);
+    });
+}
+
+// Save a file natively (Documents folder) then open the system share sheet.
+// Falls back to a browser download when running outside Capacitor.
+function saveAndShareFile(filename, content, mimeType) {
+    if (isNative && CapPlugins.Filesystem && CapPlugins.Share) {
+        return blobToBase64(new Blob([content], { type: mimeType || 'text/plain' }))
+            .then(function(base64) {
+                return CapPlugins.Filesystem.writeFile({
+                    path: filename,
+                    data: base64,
+                    directory: 'DOCUMENTS',
+                    recursive: true
+                });
+            })
+            .then(function(res) {
+                return CapPlugins.Share.share({ title: filename, url: res.uri });
+            })
+            .catch(function(err) {
+                console.warn('Documents save failed, trying cache', err);
+                return blobToBase64(new Blob([content], { type: mimeType || 'text/plain' }))
+                    .then(function(base64) {
+                        return CapPlugins.Filesystem.writeFile({ path: filename, data: base64, directory: 'CACHE' });
+                    })
+                    .then(function(res) {
+                        return CapPlugins.Share.share({ title: filename, url: res.uri });
+                    })
+                    .catch(function() {
+                        showToast(currentLang === 'ar' ? 'تعذر حفظ الملف' : 'Could not save file', 'error');
+                    });
+            });
+    }
+    browserDownload(filename, content, mimeType);
+    return Promise.resolve();
+}
+
+function browserDownload(filename, content, mimeType) {
+    var blob = new Blob(['\ufeff', content], { type: mimeType || 'application/octet-stream' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    a.click();
+    setTimeout(function() { URL.revokeObjectURL(url); }, 5000);
+}
+
+// Print via browser on desktop; on mobile save an HTML print-file and share it
+// (user picks a printer app from the system share sheet).
+function printHTMLDocument(title, bodyHtml) {
+    var printDoc = '<!DOCTYPE html><html dir="' + (currentLang === 'ar' ? 'rtl' : 'ltr') + '" lang="' + currentLang + '"><head><meta charset="UTF-8"><title>' + title + '</title>';
+    printDoc += '<style>@page { size: A4 landscape; margin: 5mm; } body { margin: 0; padding: 0; background: white; }</style>';
+    printDoc += '</head><body>' + bodyHtml + '</body></html>';
+    if (isNative) {
+        var safeName = String(title).replace(/[^\w\-\u0600-\u06FF]+/g, '_') + '.html';
+        saveAndShareFile(safeName, printDoc, 'text/html');
+        showToast(currentLang === 'ar' ? 'تم تجهيز ملف الطباعة — اختر تطبيق الطباعة من قائمة المشاركة' : 'Print file ready — pick a printer app from the share sheet', 'info');
+        return;
+    }
+    var printWindow = window.open('', '_blank');
+    printWindow.document.write(printDoc);
+    printWindow.document.close();
+    printWindow.focus();
+    setTimeout(function() { printWindow.print(); }, 500);
+}
+// =====
+
+// ===== DATALIST HELPERS =====
+function getUniqueValues(field) {
+    var values = new Set();
+    records.forEach(function(r) {
+        if (field === 'originator' && r.originator) {
+            values.add(r.originator);
+        } else if (field === 'code') {
+            r.items.forEach(function(item) {
+                if (item.code) values.add(item.code);
+            });
+        } else if (field === 'unit') {
+            r.items.forEach(function(item) {
+                if (item.unit) values.add(item.unit);
+            });
+        } else if (field === 'description') {
+            r.items.forEach(function(item) {
+                if (item.description) values.add(item.description);
+            });
+        } else if (field === 'requestedByDept' && r.requestedByDept) {
+            values.add(r.requestedByDept);
+        }
+    });
+    return Array.from(values).sort();
+}
+
+function buildDatalist(field, selectedValue, datalistId) {
+    var values = getUniqueValues(field);
+    var placeholder = '';
+    var inputClass = '';
+    var inputStyle = '';
+
+    if (field === 'code') {
+        placeholder = currentLang === 'ar' ? 'اكتب الكود أو اختر...' : 'Type code or pick...';
+        inputClass = 'code-input';
+        inputStyle = 'direction:ltr;text-align:left';
+    } else if (field === 'description') {
+        // Build select dropdown with previous values + textarea below
+        var selectPlaceholder = currentLang === 'ar' ? 'اختر من القائمة...' : 'Select from list...';
+        var manualText = currentLang === 'ar' ? '── كتابة يدوية ──' : '── Type manually ──';
+        var selectStyle = 'width:100%;padding:6px 8px;font-size:12px;border:1px solid #30363d;border-radius:4px;background:#0d1117;color:#c9d1d9;box-sizing:border-box;margin-bottom:4px;cursor:pointer;';
+        var selectHtml = '<select class="desc-select" style="' + selectStyle + '">';
+        selectHtml += '<option value="">' + selectPlaceholder + '</option>';
+        values.forEach(function(val) {
+            var isSelected = (val === selectedValue) ? ' selected' : '';
+            selectHtml += '<option value="' + val + '"' + isSelected + '>' + val + '</option>';
+        });
+        selectHtml += '<option value="__custom__">' + manualText + '</option>';
+        selectHtml += '</select>';
+
+        var taStyle = 'direction:ltr;text-align:left;width:100%;resize:vertical;min-height:50px;padding:8px;font-size:12px;border:1px solid #30363d;border-radius:4px;background:#0d1117;color:#c9d1d9;box-sizing:border-box;font-family:inherit;';
+        var taHtml = '<textarea class="desc-input" placeholder="' + (currentLang === 'ar' ? 'اكتب الوصف هنا...' : 'Type description here...') + '" style="' + taStyle + '" rows="2">' + (selectedValue || '') + '</textarea>';
+
+        return '<div style="width:100%;" class="desc-wrap">' + selectHtml + taHtml + '</div>';
+    } else if (field === 'unit') {
+        placeholder = currentLang === 'ar' ? 'اكتب الوحدة أو اختر...' : 'Type unit or pick...';
+        inputClass = 'center-input';
+        inputStyle = 'text-align:center';
+    } else if (field === 'requestedByDept') {
+        placeholder = currentLang === 'ar' ? 'اكتب القسم أو اختر...' : 'Type department or pick...';
+        inputClass = '';
+        inputStyle = 'width:100%';
+    }
+
+    var datalistHtml = '<datalist id="' + datalistId + '">';
+    values.forEach(function(val) {
+        datalistHtml += '<option value="' + val + '">' + val + '</option>';
+    });
+    datalistHtml += '</datalist>';
+
+    return '<input type="text" class="' + inputClass + '" list="' + datalistId + '" placeholder="' + placeholder + '" value="' + (selectedValue || '') + '" style="' + inputStyle + '" autocomplete="off">' + datalistHtml;
+}
+
+function populateOriginatorDatalist() {
+    var datalist = document.getElementById('originatorList');
+    if (!datalist) return;
+    var values = getUniqueValues('originator');
+    datalist.innerHTML = '';
+    values.forEach(function(val) {
+        var option = document.createElement('option');
+        option.value = val;
+        datalist.appendChild(option);
+    });
+}
+
+function populateRequestedByDeptDatalist() {
+    var datalist = document.getElementById('requestedByDeptList');
+    if (!datalist) return;
+    var values = getUniqueValues('requestedByDept');
+    datalist.innerHTML = '';
+    values.forEach(function(val) {
+        var option = document.createElement('option');
+        option.value = val;
+        datalist.appendChild(option);
+    });
+}
+
+// =====
+
+// ===== TRANSLATIONS =====
+var translations = {
+    ar: {
+        subtitle: 'نظام طلبيات المواد - مصانع الحديد والصلب',
+        currentDate: 'التاريخ الحالي',
+        addReq: '+ إضافة طلبية',
+        save: 'حفظ',
+        import: 'استيراد',
+        clearAll: 'مسح الكل',
+        print: 'طباعة',
+        searchPlaceholder: 'بحث برقم OR، الكود، الوصف...',
+        totalReq: 'إجمالي الطلبيات',
+        thisMonth: 'هذا الشهر',
+        totalItems: 'إجمالي الأصناف',
+        pending: 'بانتظار الموافقة',
+        orNumber: 'رقم OR',
+        issueDate: 'تاريخ الإصدار',
+        costCenter: 'مركز التكلفة',
+        items: 'الأصناف',
+        originator: 'المُعد',
+        status: 'الحالة',
+        actions: 'الإجراءات',
+        noReqFound: 'لا توجد طلبيات',
+        clickAdd: 'اضغط "+ إضافة طلبية" لإنشاء أول طلبية.',
+        addNewReq: 'إضافة طلبية جديدة',
+        editReq: 'تعديل الطلبية',
+        orNumberAuto: 'رقم OR (تلقائي)',
+        autoGen: 'يتم التوليد تلقائياً',
+        costCenterEx: 'مثال: 00310-009-025',
+        stNumber: 'رقم ST (اختياري)',
+        enterOriginator: 'أدخل اسم المُعد...',
+        code: 'الكود',
+        description: 'الوصف',
+        unit: 'الوحدة',
+        qty: 'الكمية',
+        install: 'INSTALL',
+        repair: 'إصلاح',
+        spec: 'مواصفات',
+        approxValue: 'Approx Value',
+        addItem: '+ إضافة صنف',
+        managerApproval: 'موافقة المدير',
+        managerName: 'اسم المدير...',
+        gmApproval: 'موافقة المدير العام',
+        gmName: 'اسم المدير العام...',
+        director: 'مدير المستخدم',
+        directorName: 'اسم المدير...',
+        pendingOpt: 'بانتظار الموافقة',
+        approvedOpt: 'تمت الموافقة',
+        rejectedOpt: 'مرفوض',
+        cancel: 'إلغاء',
+        preview: 'معاينة',
+        a4Preview: 'معاينة A4',
+        close: 'إغلاق',
+        view: 'عرض',
+        edit: 'تعديل',
+        delete: 'حذف',
+        approved: 'تمت الموافقة',
+        rejected: 'مرفوض',
+        pendingStatus: 'بانتظار الموافقة',
+        recordsCount: 'سجل',
+        addAtLeastOneItem: 'الرجاء إضافة صنف واحد على الأقل',
+        reqUpdated: 'تم تحديث الطلبية!',
+        reqAdded: 'تمت إضافة الطلبية!',
+        reqDeleted: 'تم حذف الطلبية!',
+        saveSuccess: 'تم الحفظ بنجاح!',
+        importSuccess: 'تم الاستيراد بنجاح!',
+        exportWord: 'تصدير Word',
+        exportWordSuccess: 'تم التصدير إلى Word بنجاح!',
+        invalidFile: 'تنسيق الملف غير صالح!',
+        clearConfirm: 'تحذير: حذف جميع السجلات للشهر الحالي؟',
+        cleared: 'تم مسح سجلات الشهر الحالي!',
+        noRecordsPrint: 'لا توجد سجلات للطباعة',
+        requestedByDept: 'رفعت هذه الطلبية بناءاً على',
+        attachments: 'المرفقات',
+        notes: 'ملاحظات',
+        reqType: 'نوع الطلبية',
+        materialReqType: 'MATERIAL REQUISITION',
+        emergencyReqType: 'EMERGENCY PURCHASE REQUISITION',
+        deleteConfirm: 'هل أنت متأكد من حذف هذه الطلبية؟',
+        recordDetails: 'تفاصيل الطلبية',
+        date: 'التاريخ:',
+        costCenterLabel: 'مركز التكلفة:',
+        originatorLabel: 'المُعد:',
+        statusLabel: 'الحالة:',
+        yes: 'نعم',
+        no: 'لا',
+        sector1: 'قطاع الشؤون التجارية والمالية',
+        generalAdmin: 'الإدارة العامة للمواد',
+        storageControl: 'إدارة تخزين و مراقبة المواد',
+        materialReq: 'MATERIAL REQUISITION',
+        costCenterDash: 'مركز التكلفة-',
+        issueDateLabel: 'تاريخ الإصدار :',
+        newItem: 'صنف جديد',
+        directCharge: 'تكلفة مباشرة',
+        shutDown: 'إيقاف تشغيل',
+        amendment: 'تعديل',
+        recDate: 'تاريخ الاستلام:',
+        sNo: 'م',
+        briefDesc: 'الوصف المختصر',
+        installYN: 'تركيب\nنعم/لا',
+        repairYN: 'إصلاح\nنعم/لا',
+        specLabel: 'مواصفات',
+        expectedTotal: 'القيمة الإجمالية المتوقعة',
+        originatorSign: 'المُعد:',
+        signature: 'التوقيع:',
+        dateLabel: 'التاريخ:',
+        managerAppr: 'موافقة المدير:',
+        gmAppr: 'موافقة المدير العام:',
+        userDirector: 'مدير المستخدم:',
+        plMat: 'PL & Mat . Cont. HOS:',
+        stMet: 'St. & Met. Cont. Mgr:',
+        months: ['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'],
+        systemName: 'طلبيات',
+        defaultOriginator: ''
+    },
+    en: {
+        subtitle: 'Material Requisition Management - Iron & Steel Plants',
+        currentDate: 'Current Date',
+        addReq: '+ Add Requisition',
+        save: 'Save',
+        import: 'Import',
+        clearAll: 'Clear All',
+        print: 'Print',
+        searchPlaceholder: 'Search by OR number, code, description...',
+        totalReq: 'Total Requisitions',
+        thisMonth: 'This Month',
+        totalItems: 'Total Items',
+        pending: 'Pending Approval',
+        orNumber: 'OR Number',
+        issueDate: 'Issue Date',
+        costCenter: 'Cost Center',
+        items: 'Items',
+        originator: 'Originator',
+        status: 'Status',
+        actions: 'Actions',
+        noReqFound: 'No Requisitions Found',
+        clickAdd: 'Click "+ Add Requisition" to create your first requisition.',
+        addNewReq: 'Add New Requisition',
+        editReq: 'Edit Requisition',
+        orNumberAuto: 'OR Number (Auto)',
+        autoGen: 'Auto-generated',
+        costCenterEx: 'e.g. 00310-009-025',
+        stNumber: 'ST Number (Optional)',
+        enterOriginator: 'Enter originator name...',
+        code: 'Code',
+        description: 'Description',
+        unit: 'Unit',
+        qty: 'Qty',
+        install: 'Install',
+        repair: 'Repair',
+        spec: 'Spec.',
+        approxValue: 'Approx Value',
+        addItem: '+ Add Item',
+        managerApproval: 'Manager Approval',
+        managerName: 'Manager name...',
+        gmApproval: 'GM Approval',
+        gmName: 'GM name...',
+        director: 'User Director',
+        directorName: 'Director name...',
+        pendingOpt: 'Pending',
+        approvedOpt: 'Approved',
+        rejectedOpt: 'Rejected',
+        cancel: 'Cancel',
+        preview: 'Preview',
+        a4Preview: 'A4 Preview',
+        close: 'Close',
+        view: 'View',
+        edit: 'Edit',
+        delete: 'Del',
+        approved: 'Approved',
+        rejected: 'Rejected',
+        pendingStatus: 'Pending',
+        recordsCount: 'records',
+        addAtLeastOneItem: 'Please add at least one item',
+        reqUpdated: 'Requisition updated!',
+        reqAdded: 'Requisition added!',
+        reqDeleted: 'Requisition deleted!',
+        saveSuccess: 'Data saved successfully!',
+        importSuccess: 'Import successful!',
+        exportWord: 'Export Word',
+        exportWordSuccess: 'Exported to Word successfully!',
+        invalidFile: 'Invalid file format!',
+        clearConfirm: 'WARNING: Delete ALL records for current month?',
+        cleared: 'Current month records cleared!',
+        noRecordsPrint: 'No records to print',
+        requestedByDept: 'Requested by Department',
+        attachments: 'Attachments',
+        notes: 'Notes',
+        reqType: 'Requisition Type',
+        materialReqType: 'MATERIAL REQUISITION',
+        emergencyReqType: 'EMERGENCY PURCHASE REQUISITION',
+        deleteConfirm: 'Are you sure you want to delete this requisition?',
+        recordDetails: 'Record Details',
+        date: 'Date:',
+        costCenterLabel: 'Cost Center:',
+        originatorLabel: 'Originator:',
+        statusLabel: 'Status:',
+        yes: 'YES',
+        no: 'NO',
+        sector1: 'Commercial & Financial Affairs Sector',
+        generalAdmin: 'General Materials Administration',
+        storageControl: 'Storage & Materials Control Dept.',
+        materialReq: 'MATERIAL REQUISITION',
+        costCenterDash: 'Cost Center-',
+        issueDateLabel: 'Issue Date :',
+        newItem: 'New Item',
+        directCharge: 'Direct Charge',
+        shutDown: 'Shut Down',
+        amendment: 'Amendment',
+        recDate: 'Rec. Date:',
+        sNo: 'S.No',
+        briefDesc: 'Brief Description',
+        installYN: 'Install\nYes/No',
+        repairYN: 'Repair\nYes/No',
+        specLabel: 'Spec.',
+        expectedTotal: 'Expected Total Value',
+        originatorSign: 'Originator:',
+        signature: 'Signature:',
+        dateLabel: 'Date:',
+        managerAppr: 'Manager Appr.:',
+        gmAppr: 'General Manager Approval:',
+        userDirector: 'User Director:',
+        plMat: 'PL & Mat . Cont. HOS:',
+        stMet: 'St. & Met. Cont. Mgr:',
+        months: ['January','February','March','April','May','June','July','August','September','October','November','December'],
+        systemName: 'OR SYSTEM',
+        defaultOriginator: ''
+    }
+};
+
+var currentLang = 'ar';
+
+function initLanguage() {
+    var saved = null;
+    if (!isNative) {
+        try { saved = localStorage.getItem('OR_SYSTEM_lang'); } catch (e) {}
+    }
+    if (isNative && CapPlugins.Preferences) {
+        CapPlugins.Preferences.get({ key: 'OR_SYSTEM_lang' }).then(function(res) {
+            if (res.value && translations[res.value] && res.value !== currentLang) {
+                currentLang = res.value;
+                applyLanguage();
+            }
+        });
+    }
+    if (saved && translations[saved]) {
+        currentLang = saved;
+    }
+    applyLanguage();
+}
+
+function toggleLanguage() {
+    currentLang = currentLang === 'ar' ? 'en' : 'ar';
+    if (isNative && CapPlugins.Preferences) {
+        CapPlugins.Preferences.set({ key: 'OR_SYSTEM_lang', value: currentLang });
+    } else {
+        try { localStorage.setItem('OR_SYSTEM_lang', currentLang); } catch (e) {}
+    }
+    applyLanguage();
+}
+
+function applyLanguage() {
+    var tr = translations[currentLang];
+    var html = document.documentElement;
+
+    html.setAttribute('dir', currentLang === 'ar' ? 'rtl' : 'ltr');
+    html.setAttribute('lang', currentLang);
+
+    var btn = document.getElementById('langToggle');
+    if (btn) btn.textContent = currentLang === 'ar' ? 'EN' : 'AR';
+
+    document.querySelectorAll('[data-i18n]').forEach(function(el) {
+        var key = el.getAttribute('data-i18n');
+        if (tr[key] !== undefined) {
+            el.textContent = tr[key];
+        }
+    });
+
+    // Update logo based on language
+    var logoEl = document.querySelector('.logo');
+    if (logoEl) {
+        logoEl.textContent = currentLang === 'ar' ? 'طلبيات' : 'OR SYSTEM';
+    }
+
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(function(el) {
+        var key = el.getAttribute('data-i18n-placeholder');
+        if (tr[key] !== undefined) {
+            el.placeholder = tr[key];
+        }
+    });
+
+    var statusSelect = document.getElementById('status');
+    if (statusSelect) {
+        var opts = statusSelect.querySelectorAll('option');
+        opts.forEach(function(opt) {
+            var key = opt.getAttribute('data-i18n');
+            if (key && tr[key] !== undefined) {
+                opt.textContent = tr[key];
+            }
+        });
+    }
+
+    updateCurrentDate();
+    generateMonthTabs();
+    renderTable();
+}
+
+function t(key) {
+    return translations[currentLang][key] || key;
+}
+
+// ===== APP STATE =====
+var records = [];
+var currentMonth = new Date().getMonth();
+var currentYear = new Date().getFullYear();
+var editingId = null;
+var currentPage = 1;
+var itemsPerPage = 10;
+var itemCounter = 0;
+
+// ===== EVENT LISTENERS =====
+document.addEventListener('DOMContentLoaded', function() {
+    initLanguage();
+    updateCurrentDate();
+    generateMonthTabs();
+    loadFromStorage();
+    renderTable();
+    updateStats();
+    document.getElementById('issueDate').value = new Date().toISOString().split('T')[0];
+
+    // Bind all button events
+    document.getElementById('langToggle').addEventListener('click', toggleLanguage);
+    document.getElementById('btnAddReq').addEventListener('click', function() { openModal(); });
+    document.getElementById('btnSave').addEventListener('click', saveAllData);
+    document.getElementById('btnImport').addEventListener('click', importData);
+    document.getElementById('btnClear').addEventListener('click', clearAllData);
+    document.getElementById('btnPrint').addEventListener('click', printSelected);
+    document.getElementById('searchInput').addEventListener('input', searchRecords);
+    document.getElementById('modalCloseBtn').addEventListener('click', closeModal);
+    document.getElementById('btnCancel').addEventListener('click', closeModal);
+    document.getElementById('btnSaveRecord').addEventListener('click', function(e) { saveRecord(e); });
+    document.getElementById('btnPreview').addEventListener('click', previewBeforeSave);
+    document.getElementById('btnExportWord').addEventListener('click', exportCurrentToWord);
+    document.getElementById('btnAddItem').addEventListener('click', function() { addItemRow(); });
+    document.getElementById('previewCloseBtn').addEventListener('click', closePreviewModal);
+    document.getElementById('previewClose').addEventListener('click', closePreviewModal);
+    document.getElementById('previewPrint').addEventListener('click', printA4);
+
+    // Form submit handler
+    document.getElementById('recordForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        saveRecord(e);
+    });
+
+    // Modal click outside
+    document.getElementById('modalOverlay').addEventListener('click', function(e) {
+        if (e.target === this) closeModal();
+    });
+    document.getElementById('previewModal').addEventListener('click', function(e) {
+        if (e.target === this) closePreviewModal();
+    });
+
+    // Escape key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closeModal();
+            closePreviewModal();
+            document.querySelectorAll('.modal').forEach(function(m) {
+                if (m.id !== 'modalOverlay' && m.id !== 'previewModal') m.remove();
+            });
+        }
+    });
+
+    // ===== AUTO-SAVE =====
+    var hasUnsavedChanges = false;
+
+    // Track changes in modal form
+    document.getElementById('recordForm').addEventListener('input', function() {
+        hasUnsavedChanges = true;
+    });
+
+    // Auto-save every 30 seconds
+    setInterval(function() {
+        if (hasUnsavedChanges && records.length > 0) {
+            saveToStorage();
+            hasUnsavedChanges = false;
+            showToast(currentLang === 'ar' ? 'تم الحفظ التلقائي (كل 5 دقائق)' : 'Auto-saved (every 5 min)', 'info');
+        }
+    }, isNative ? 60000 : 300000);
+
+    // Warning before closing with unsaved changes
+    window.addEventListener('beforeunload', function(e) {
+        if (hasUnsavedChanges) {
+            var msg = currentLang === 'ar' ? 'لديك تغييرات غير محفوظة. هل تريد المغادرة؟' : 'You have unsaved changes. Leave?';
+            e.returnValue = msg;
+            return msg;
+        }
+    });
+
+    // Mark as saved after manual save
+    document.getElementById('btnSaveRecord').addEventListener('click', function() {
+        hasUnsavedChanges = false;
+    });
+});
+
+function updateCurrentDate() {
+    var locale = currentLang === 'ar' ? 'ar-SA' : 'en-US';
+    var options = { weekday:'long', year:'numeric', month:'long', day:'numeric' };
+    document.getElementById('curDate').textContent = new Date().toLocaleDateString(locale, options);
+}
+
+function generateMonthTabs() {
+    var container = document.getElementById('monthSelector');
+    container.innerHTML = '';
+    var months = t('months');
+    for (var i = 0; i < 12; i++) {
+        var tab = document.createElement('div');
+        tab.className = 'mtab' + (i === currentMonth ? ' active' : '');
+        tab.textContent = months[i] + ' ' + currentYear;
+        tab.addEventListener('click', (function(idx) {
+            return function() { selectMonth(idx); };
+        })(i));
+        container.appendChild(tab);
+    }
+}
+
+function selectMonth(index) {
+    currentMonth = index;
+    currentPage = 1;
+    var tabs = document.querySelectorAll('.mtab');
+    for (var i = 0; i < tabs.length; i++) {
+        tabs[i].classList.toggle('active', i === index);
+    }
+    renderTable();
+    updateStats();
+}
+
+function generateORNumber() {
+    var monthRecords = records.filter(function(r) {
+        return r.month === currentMonth && r.year === currentYear;
+    });
+    var seq = monthRecords.length + 1;
+    var seqStr = String(seq).padStart(2, '0');
+    var monthStr = String(currentMonth + 1).padStart(2, '0');
+    var yearStr = String(currentYear).slice(-2);
+    return 'OR-' + seqStr + '-' + monthStr + '-' + yearStr;
+}
+
+function generateNextORNumber() {
+    var monthRecords = records.filter(function(r) {
+        return r.month === currentMonth && r.year === currentYear;
+    });
+    var seq = monthRecords.length + 1;
+    var seqStr = String(seq).padStart(2, '0');
+    var monthStr = String(currentMonth + 1).padStart(2, '0');
+    var yearStr = String(currentYear).slice(-2);
+    return 'OR-' + seqStr + '-' + monthStr + '-' + yearStr;
+}
+
+function addItemRow(data) {
+    data = data || {};
+    itemCounter++;
+    var container = document.getElementById('itemsContainer');
+
+    // Create block wrapper
+    var block = document.createElement('div');
+    block.className = 'item-block';
+    block.id = 'itemBlock_' + itemCounter;
+
+    // Row 1: small fields (no description)
+    var row = document.createElement('div');
+    row.className = 'item-row';
+    var yesText = t('yes');
+    var noText = t('no');
+    var selectText = currentLang === 'ar' ? 'اختر' : 'Select';
+    row.innerHTML = 
+        '<div class="item-num" style="text-align:center">' + itemCounter + '</div>' +
+        buildDatalist('code', data.code || '', 'codeList_' + itemCounter) +
+        buildDatalist('unit', data.unit || '', 'unitList_' + itemCounter) +
+        '<input type="number" class="center-input" placeholder="' + t('approxValue') + '" value="' + (data.approxValue || '') + '" style="text-align:center">' +
+        '<input type="number" class="center-input" placeholder="' + t('qty') + '" value="' + (data.qty || '') + '" style="text-align:center">' +
+        '<input type="number" class="center-input" placeholder="' + t('install') + '" value="' + (data.install || '') + '" style="text-align:center">' +
+        '<select class="center-select" style="padding:6px;border:1px solid #30363d;border-radius:4px;background:#0d1117;color:#c9d1d9;font-size:12px;text-align:center">' +
+        '<option value="">' + selectText + '</option><option value="YES" ' + (data.repair === 'YES' ? 'selected' : '') + '>' + yesText + '</option><option value="NO" ' + (data.repair === 'NO' ? 'selected' : '') + '>' + noText + '</option>' +
+        '</select>' +
+        '<select class="center-select" style="padding:6px;border:1px solid #30363d;border-radius:4px;background:#0d1117;color:#c9d1d9;font-size:12px;text-align:center">' +
+        '<option value="">' + selectText + '</option><option value="YES" ' + (data.spec === 'YES' ? 'selected' : '') + '>' + yesText + '</option><option value="NO" ' + (data.spec === 'NO' ? 'selected' : '') + '>' + noText + '</option>' +
+        '</select>' +
+        '<button type="button" class="btn-remove" data-row-id="' + itemCounter + '">×</button>';
+
+    // Row 2: description full width with select dropdown + textarea
+    var descRow = document.createElement('div');
+    descRow.className = 'desc-row';
+    descRow.innerHTML = 
+        '<div class="desc-label">' + t('description') + '</div>' +
+        '<div class="desc-field">' + buildDatalist('description', data.description || '', 'descList_' + itemCounter) + '</div>';
+
+    // Remove button event
+    row.querySelector('.btn-remove').addEventListener('click', function() {
+        removeItemRow(this.getAttribute('data-row-id'));
+    });
+
+    // Description select dropdown logic: copy selected value to textarea
+    var descWrap = descRow.querySelector('.desc-wrap');
+    if (descWrap) {
+        var descSelect = descWrap.querySelector('.desc-select');
+        var descTa = descWrap.querySelector('textarea.desc-input');
+        if (descSelect && descTa) {
+            descSelect.addEventListener('change', function() {
+                if (this.value && this.value !== '__custom__') {
+                    descTa.value = this.value;
+                }
+            });
+        }
+    }
+
+    block.appendChild(row);
+    block.appendChild(descRow);
+    container.appendChild(block);
+}
+
+function removeItemRow(id) {
+    var block = document.getElementById('itemBlock_' + id);
+    if (block) block.remove();
+    renumberItems();
+}
+
+function renumberItems() {
+    var blocks = document.querySelectorAll('.item-block');
+    blocks.forEach(function(block, index) {
+        var row = block.querySelector('.item-row');
+        if (row) {
+            row.querySelector('.item-num').textContent = index + 1;
+        }
+    });
+    itemCounter = blocks.length;
+}
+
+function openModal(recordId) {
+    editingId = recordId || null;
+    var modal = document.getElementById('modalOverlay');
+    document.getElementById('modalTitle').textContent = recordId ? t('editReq') : t('addNewReq');
+
+    if (recordId) {
+        var record = records.find(function(r) { return r.id == recordId; });
+        if (record) {
+            document.getElementById('orNumberFull').value = record.orNumber || '';
+            document.getElementById('issueDate').value = record.issueDate;
+            document.getElementById('costCenter').value = record.costCenter;
+            document.getElementById('stNumber').value = record.stNumber || '';
+            document.getElementById('tsNumber').value = record.tsNumber || '';
+            document.getElementById('tsRef').value = record.tsRef || '';
+            document.getElementById('originator').value = record.originator;
+            document.getElementById('managerName').value = record.managerName || '';
+            document.getElementById('gmName').value = record.gmName || '';
+            document.getElementById('directorName').value = record.directorName || '';
+            document.getElementById('requestedByDept').value = record.requestedByDept || '';
+            document.getElementById('attachments').value = record.attachments || '';
+            document.getElementById('notes').value = record.notes || '';
+            var reqTypeRadio = document.querySelector('input[name="reqType"][value="' + (record.reqType || 'material') + '"]');
+            if (reqTypeRadio) reqTypeRadio.checked = true;
+            document.getElementById('status').value = record.status || 'pending';
+
+            var container = document.getElementById('itemsContainer');
+            var rows = container.querySelectorAll('.item-row:not(.header)');
+            rows.forEach(function(r) { r.remove(); });
+            itemCounter = 0;
+
+            record.items.forEach(function(item) {
+                addItemRow(item);
+            });
+        }
+    } else {
+        document.getElementById('recordForm').reset();
+        document.getElementById('orNumberFull').value = generateNextORNumber();
+        document.getElementById('issueDate').value = new Date().toISOString().split('T')[0];
+        document.getElementById('costCenter').value = '00310-009-025';
+        document.getElementById('originator').value = ''; populateOriginatorDatalist(); populateRequestedByDeptDatalist();
+
+        var container = document.getElementById('itemsContainer');
+        var rows = container.querySelectorAll('.item-row:not(.header)');
+        rows.forEach(function(r) { r.remove(); });
+        itemCounter = 0;
+        addItemRow();
+    }
+
+    modal.classList.add('show');
+}
+
+function closeModal() {
+    document.getElementById('modalOverlay').classList.remove('show');
+    editingId = null;
+}
+
+function getItemsFromForm() {
+    var items = [];
+    var blocks = document.querySelectorAll('.item-block');
+    blocks.forEach(function(block) {
+        var row = block.querySelector('.item-row');
+        var descRow = block.querySelector('.desc-row');
+        if (!row) return;
+        var codeInput = row.querySelector('.code-input');
+        var unitInput = row.querySelector('input[list^="unitList_"]');
+        var numericInputs = row.querySelectorAll('input[type="number"].center-input');
+        var selects = row.querySelectorAll('select.center-select');
+        var repairSelect = selects[0];
+        var specSelect = selects[1];
+        var descInput = null;
+        if (descRow) {
+            var descWrap = descRow.querySelector('.desc-wrap');
+            if (descWrap) descInput = descWrap.querySelector('textarea.desc-input');
+        }
+
+        var codeVal = codeInput ? codeInput.value.trim() : '';
+        var descVal = descInput ? descInput.value.trim() : '';
+
+        // Accept item if code OR description is filled
+        if (codeVal || descVal) {
+            items.push({
+                code: codeVal,
+                description: descVal,
+                unit: unitInput ? unitInput.value.trim() : '',
+                approxValue: numericInputs[0] ? numericInputs[0].value.trim() : '',
+                qty: numericInputs[1] ? numericInputs[1].value.trim() : '',
+                install: numericInputs[2] ? numericInputs[2].value : '',
+                repair: repairSelect ? repairSelect.value : '',
+                spec: specSelect ? specSelect.value : ''
+            });
+        }
+    });
+    return items;
+}
+
+function saveRecord(event) {
+    if (event) event.preventDefault();
+    var items = getItemsFromForm();
+    if (items.length === 0) {
+        showToast(t('addAtLeastOneItem'), 'error');
+        return;
+    }
+
+    var issueDate = document.getElementById('issueDate').value;
+    var dateObj = new Date(issueDate);
+
+    var record = {
+        id: editingId || Date.now().toString(),
+        orNumber: document.getElementById('orNumberFull').value,
+        issueDate: issueDate,
+        costCenter: document.getElementById('costCenter').value,
+        stNumber: document.getElementById('stNumber').value,
+        tsNumber: document.getElementById('tsNumber').value,
+        tsRef: document.getElementById('tsRef').value,
+        originator: document.getElementById('originator').value,
+        managerName: document.getElementById('managerName').value,
+        gmName: document.getElementById('gmName').value,
+        directorName: document.getElementById('directorName').value,
+        requestedByDept: document.getElementById('requestedByDept').value,
+        attachments: document.getElementById('attachments').value,
+        notes: document.getElementById('notes').value,
+        reqType: document.querySelector('input[name="reqType"]:checked').value,
+        status: document.getElementById('status').value,
+        items: items,
+        month: dateObj.getMonth(),
+        year: dateObj.getFullYear(),
+        createdAt: new Date().toISOString()
+    };
+
+    if (editingId) {
+        var idx = records.findIndex(function(r) { return r.id == editingId; });
+        if (idx >= 0) records[idx] = record;
+        showToast(t('reqUpdated'), 'success');
+    } else {
+        records.push(record);
+        showToast(t('reqAdded'), 'success');
+    }
+
+    closeModal();
+    renderTable();
+    updateStats();
+    saveToStorage();
+}
+
+function getFilteredRecords() {
+    var searchTerm = document.getElementById('searchInput').value.toLowerCase();
+    return records.filter(function(r) {
+        var matchesMonth = r.month === currentMonth && r.year === currentYear;
+        var matchesSearch = !searchTerm || 
+            r.orNumber.toLowerCase().includes(searchTerm) ||
+            r.originator.toLowerCase().includes(searchTerm) ||
+            r.items.some(function(i) { 
+                return i.code.toLowerCase().includes(searchTerm) || 
+                       i.description.toLowerCase().includes(searchTerm); 
+            });
+        return matchesMonth && matchesSearch;
+    });
+}
+
+function renderTable() {
+    var tbody = document.getElementById('tableBody');
+    var emptyState = document.getElementById('emptyState');
+    var filtered = getFilteredRecords();
+
+    var totalPages = Math.ceil(filtered.length / itemsPerPage);
+    if (currentPage > totalPages) currentPage = totalPages || 1;
+    var start = (currentPage - 1) * itemsPerPage;
+    var end = start + itemsPerPage;
+    var pageRecords = filtered.slice(start, end);
+
+    if (filtered.length === 0) {
+        tbody.innerHTML = '';
+        emptyState.style.display = 'block';
+        document.getElementById('pagination').style.display = 'none';
+        return;
+    }
+
+    emptyState.style.display = 'none';
+    document.getElementById('pagination').style.display = totalPages > 1 ? 'flex' : 'none';
+
+    var html = '';
+    pageRecords.forEach(function(record, idx) {
+        var globalIndex = start + idx + 1;
+        var statusBadge = record.status === 'approved' ? 
+            '<span style="color:#00b894;font-weight:700">' + t('approved') + '</span>' :
+            record.status === 'rejected' ? 
+            '<span style="color:#d63031;font-weight:700">' + t('rejected') + '</span>' :
+            '<span style="color:#fdcb6e;font-weight:700">' + t('pendingStatus') + '</span>';
+
+        html += '<tr>' +
+            '<td>' + globalIndex + '</td>' +
+            '<td style="font-weight:700;color:#e94560">' + record.orNumber + '</td>' +
+            '<td>' + formatDate(record.issueDate) + '</td>' +
+            '<td>' + record.costCenter + '</td>' +
+            '<td>' + record.items.length + '</td>' +
+            '<td>' + record.originator + '</td>' +
+            '<td>' + statusBadge + '</td>' +
+            '<td style="font-size:11px">' + (record.reqType === 'emergency' ? 'EMERGENCY' : 'MATERIAL') + '</td>' +
+            '<td>' +
+            '<div style="display:flex;gap:4px;justify-content:center">' +
+            '<button class="btn btn-view" data-id="' + record.id + '" style="padding:4px 8px;font-size:11px;background:#0984e3;color:white">' + t('view') + '</button>' +
+            '<button class="btn btn-edit" data-id="' + record.id + '" style="padding:4px 8px;font-size:11px;background:#00b894;color:white">' + t('edit') + '</button>' +
+            '<button class="btn btn-print" data-id="' + record.id + '" style="padding:4px 8px;font-size:11px;background:#6c5ce7;color:white">' + t('print') + '</button>' +
+            '<button class="btn btn-delete" data-id="' + record.id + '" style="padding:4px 8px;font-size:11px;background:#d63031;color:white">' + t('delete') + '</button>' +
+            '</div>' +
+            '</td>' +
+            '</tr>';
+    });
+
+    tbody.innerHTML = html;
+
+    tbody.querySelectorAll('.btn-view').forEach(function(btn) {
+        btn.addEventListener('click', function() { viewRecord(this.getAttribute('data-id')); });
+    });
+    tbody.querySelectorAll('.btn-edit').forEach(function(btn) {
+        btn.addEventListener('click', function() { openModal(this.getAttribute('data-id')); });
+    });
+    tbody.querySelectorAll('.btn-print').forEach(function(btn) {
+        btn.addEventListener('click', function() { printRecord(this.getAttribute('data-id')); });
+    });
+    tbody.querySelectorAll('.btn-delete').forEach(function(btn) {
+        btn.addEventListener('click', function() { deleteRecord(this.getAttribute('data-id')); });
+    });
+
+    renderPagination(totalPages, filtered.length);
+}
+
+function renderPagination(totalPages, totalItems) {
+    var container = document.getElementById('pagination');
+    if (totalPages <= 1) return;
+
+    var marginSide = currentLang === 'ar' ? 'margin-left' : 'margin-right';
+    var html = '<span style="color:#8b949e;font-size:12px;' + marginSide + ':10px">' + totalItems + ' ' + t('recordsCount') + '</span>';
+    html += '<button class="page-btn" data-page="1" ' + (currentPage === 1 ? 'disabled' : '') + '>«</button>';
+    html += '<button class="page-btn" data-page="' + (currentPage - 1) + '" ' + (currentPage === 1 ? 'disabled' : '') + '>‹</button>';
+
+    for (var i = 1; i <= totalPages; i++) {
+        if (i === 1 || i === totalPages || (i >= currentPage - 2 && i <= currentPage + 2)) {
+            html += '<button class="page-btn ' + (i === currentPage ? 'active' : '') + '" data-page="' + i + '">' + i + '</button>';
+        } else if (i === currentPage - 3 || i === currentPage + 3) {
+            html += '<span style="color:#666">...</span>';
+        }
+    }
+
+    html += '<button class="page-btn" data-page="' + (currentPage + 1) + '" ' + (currentPage === totalPages ? 'disabled' : '') + '>›</button>';
+    html += '<button class="page-btn" data-page="' + totalPages + '" ' + (currentPage === totalPages ? 'disabled' : '') + '>»</button>';
+
+    container.innerHTML = html;
+
+    container.querySelectorAll('.page-btn:not([disabled])').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            changePage(parseInt(this.getAttribute('data-page')));
+        });
+    });
+}
+
+function changePage(page) {
+    currentPage = page;
+    renderTable();
+}
+
+function formatDate(dateStr) {
+    if (!dateStr) return '-';
+    var d = new Date(dateStr);
+    var locale = currentLang === 'ar' ? 'ar-SA' : 'en-GB';
+    return d.toLocaleDateString(locale);
+}
+
+function viewRecord(id) {
+    var record = records.find(function(r) { return r.id == id; });
+    if (!record) return;
+
+    var itemsHtml = record.items.map(function(item, idx) {
+        var installText = item.install || '';
+        var repairText = item.repair === 'YES' ? t('yes') : item.repair === 'NO' ? t('no') : '';
+        var specText = item.spec === 'YES' ? t('yes') : item.spec === 'NO' ? t('no') : '';
+        return '<tr style="border-bottom:1px solid #30363d">' +
+            '<td style="padding:8px">' + (idx + 1) + '</td>' +
+            '<td style="padding:8px">' + item.code + '</td>' +
+            '<td style="padding:8px;text-align:' + (currentLang === 'ar' ? 'right' : 'left') + '">' + item.description + '</td>' +
+            '<td style="padding:8px">' + item.unit + '</td>' +
+            '<td style="padding:8px">' + (item.approxValue || '') + '</td>' +
+            '<td style="padding:8px">' + item.qty + '</td>' +
+            '<td style="padding:8px">' + installText + '</td>' +
+            '<td style="padding:8px">' + repairText + '</td>' +
+            '<td style="padding:8px">' + specText + '</td>' +
+            '</tr>';
+    }).join('');
+
+    var statusText = record.status === 'approved' ? t('approved') : record.status === 'rejected' ? t('rejected') : t('pendingStatus');
+
+    var html = '<div style="background:#0d1117;padding:20px;border-radius:8px">' +
+        '<h3 style="color:#e94560;margin-bottom:15px">' + record.orNumber + '</h3>' +
+        '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:15px;font-size:13px">' +
+        '<div><strong style="color:#8b949e">' + t('date') + '</strong> ' + formatDate(record.issueDate) + '</div>' +
+        '<div><strong style="color:#8b949e">' + t('costCenterLabel') + '</strong> ' + record.costCenter + '</div>' +
+        '<div><strong style="color:#8b949e">' + t('originatorLabel') + '</strong> ' + record.originator + '</div>' +
+        '<div><strong style="color:#8b949e">' + t('statusLabel') + '</strong> ' + statusText + '</div>' +
+        '</div>' +
+        (record.notes ? '<div style="margin-top:10px;padding:10px;background:#21262d;border-radius:6px"><strong style="color:#8b949e">' + t('notes') + ':</strong> ' + record.notes + '</div>' : '') +
+        '<table style="width:100%;font-size:12px">' +
+        '<thead><tr style="color:#58a6ff;font-weight:700">' +
+        '<th>#</th><th>' + t('code') + '</th><th>' + t('description') + '</th><th>' + t('unit') + '</th><th>' + t('approxValue') + '</th><th>' + t('qty') + '</th><th>' + t('install') + '</th><th>' + t('repair') + '</th><th>' + t('spec') + '</th>' +
+        '</tr></thead><tbody>' + itemsHtml + '</tbody></table>' +
+        '</div>';
+
+    showModal(t('recordDetails'), html);
+}
+
+function showModal(title, content) {
+    var modal = document.createElement('div');
+    modal.className = 'modal show';
+    modal.style.zIndex = '3000';
+    modal.innerHTML = '<div class="modal-box" style="max-width:800px">' +
+        '<div class="modal-head"><h2>' + title + '</h2><button class="modal-close modal-close-dynamic">&times;</button></div>' +
+        '<div class="modal-body">' + content + '</div>' +
+        '<div class="modal-foot"><button class="btn btn-gray modal-close-btn">' + t('close') + '</button></div>' +
+        '</div>';
+    document.body.appendChild(modal);
+
+    modal.querySelector('.modal-close-dynamic').addEventListener('click', function() {
+        modal.remove();
+    });
+    modal.querySelector('.modal-close-btn').addEventListener('click', function() {
+        modal.remove();
+    });
+    modal.addEventListener('click', function(e) {
+        if (e.target === modal) modal.remove();
+    });
+}
+
+function deleteRecord(id) {
+    if (!confirm(t('deleteConfirm'))) return;
+    records = records.filter(function(r) { return r.id != id; });
+    renderTable();
+    updateStats();
+    saveToStorage();
+    showToast(t('reqDeleted'), 'success');
+}
+
+function updateStats() {
+    var monthRecords = records.filter(function(r) {
+        return r.month === currentMonth && r.year === currentYear;
+    });
+
+    var totalItems = monthRecords.reduce(function(sum, r) {
+        return sum + r.items.length;
+    }, 0);
+
+    var pendingCount = monthRecords.filter(function(r) {
+        return r.status === 'pending';
+    }).length;
+
+    document.getElementById('totalRecords').textContent = records.length;
+    document.getElementById('totalMonth').textContent = monthRecords.length;
+    document.getElementById('totalItems').textContent = totalItems;
+    document.getElementById('totalPending').textContent = pendingCount;
+}
+
+function searchRecords() {
+    currentPage = 1;
+    renderTable();
+}
+
+function saveAllData() {
+    var data = { records: records, exportDate: new Date().toISOString() };
+    saveToStorage();
+    var months = t('months');
+    var filename = 'OR_SYSTEM_backup_' + currentYear + '_' + months[currentMonth] + '.json';
+    saveAndShareFile(filename, JSON.stringify(data, null, 2), 'application/json');
+    showToast(t('saveSuccess'), 'success');
+}
+
+function importData() {
+    var input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.json';
+    input.onchange = function(e) {
+        var file = e.target.files[0];
+        if (!file) return;
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            try {
+                var data = JSON.parse(e.target.result);
+                if (data.records && Array.isArray(data.records)) {
+                    records = data.records;
+                    renderTable();
+                    updateStats();
+                    saveToStorage();
+                    showToast(t('importSuccess') + ' ' + data.records.length + ' ' + t('recordsCount') + '.', 'success');
+                }
+            } catch (err) {
+                showToast(t('invalidFile'), 'error');
+            }
+        };
+        reader.readAsText(file);
+    };
+    input.click();
+}
+
+function clearAllData() {
+    if (!confirm(t('clearConfirm'))) return;
+    records = records.filter(function(r) {
+        return !(r.month === currentMonth && r.year === currentYear);
+    });
+    renderTable();
+    updateStats();
+    saveToStorage();
+    showToast(t('cleared'), 'success');
+}
+
+function saveToStorage() {
+    var payload = JSON.stringify({ records: records });
+    if (isNative && CapPlugins.Preferences) {
+        CapPlugins.Preferences.set({ key: 'OR_SYSTEM_records', value: payload });
+        return true;
+    }
+    try {
+        localStorage.setItem('OR_SYSTEM_records', payload);
+        return true;
+    } catch (e) {
+        console.warn('LocalStorage not available');
+        return false;
+    }
+}
+
+function loadFromStorage() {
+    if (isNative && CapPlugins.Preferences) {
+        CapPlugins.Preferences.get({ key: 'OR_SYSTEM_records' }).then(function(res) {
+            try {
+                if (res.value) {
+                    var data = JSON.parse(res.value);
+                    if (data.records) records = data.records;
+                }
+            } catch (e) {}
+            renderTable();
+            updateStats();
+        });
+        return;
+    }
+    try {
+        var stored = localStorage.getItem('OR_SYSTEM_records');
+        if (stored) {
+            var data = JSON.parse(stored);
+            if (data.records) records = data.records;
+        }
+    } catch (e) {
+        console.warn('LocalStorage not available');
+    }
+}
+
+function showToast(message, type) {
+    type = type || 'info';
+    var toast = document.getElementById('toast');
+    toast.textContent = message;
+    toast.className = 'toast toast-' + type + ' show';
+    setTimeout(function() {
+        toast.classList.remove('show');
+    }, 3000);
+}
+
+// ===== PRINTING FUNCTIONS =====
+
+function generateA4HTML(record) {
+    var itemsHtml = record.items.map(function(item, idx) {
+        return '<tr style="border-bottom:1px solid #333">' +
+            '<td style="padding:6px;text-align:center;border-right:1px solid #333">' + (idx + 1) + '</td>' +
+            '<td style="padding:6px;text-align:center;border-right:1px solid #333">' + item.code + '</td>' +
+            '<td style="padding:6px;text-align:left;direction:ltr;border-right:1px solid #333">' + item.description + '</td>' +
+            '<td style="padding:6px;text-align:center;border-right:1px solid #333">' + item.unit + '</td>' +
+            '<td style="padding:6px;text-align:center;border-right:1px solid #333">' + (item.approxValue || '') + '</td>' +
+            '<td style="padding:6px;text-align:center;border-right:1px solid #333">' + item.qty + '</td>' +
+            '<td style="padding:6px;text-align:center;border-right:1px solid #333">' + (item.install || '') + '</td>' +
+            '<td style="padding:6px;text-align:center;border-right:1px solid #333">' + (item.repair || '') + '</td>' +
+            '<td style="padding:6px;text-align:center">' + (item.spec || '') + '</td>' +
+            '</tr>';
+    }).join('');
+
+    var dateParts = record.issueDate.split('-');
+    var formattedDate = dateParts[2] + '/' + dateParts[1] + '/' + dateParts[0];
+
+    var dir = 'ltr'; // Always LTR for consistent printing
+    var textAlign = 'left'; // Always left for consistent printing
+
+    return '<div style="width:100%;padding:10mm;font-family:Arial,sans-serif;font-size:10pt;line-height:1.3;direction:' + dir + ';text-align:' + textAlign + ';box-sizing:border-box">' +
+
+        '<table style="width:100%;border-collapse:collapse;margin-bottom:5px">' +
+        '<tr>' +
+        '<td style="width:25%;text-align:center;border:2px solid #000;padding:4px;vertical-align:middle;direction:rtl">' +
+        '<div style="font-size:11pt;font-weight:bold">قطاع الشؤون التجارية والمالية</div>' +
+        '<div style="font-size:10pt;font-weight:bold;margin-top:3px">الإدارة العامة للمواد</div>' +
+        '<div style="font-size:9pt;margin-top:3px">إدارة تخزين و مراقبة المواد</div>' +
+        '</td>' +
+        '<td style="width:25%;text-align:center;border:2px solid #000;padding:4px;vertical-align:middle">' +
+        '<div style="font-size:12pt;font-weight:bold">' + (record.reqType === 'emergency' ? 'EMERGENCY PURCHASE REQUISITION' : 'MATERIAL REQUISITION') + '</div>' +
+        '</td>' +
+        '<td style="width:25%;text-align:center;border:2px solid #000;padding:4px;vertical-align:middle">' +
+        '<div style="font-size:12pt;font-weight:bold;font-family:monospace;letter-spacing:2px">' + (record.orNumber || '') + '</div>' +
+        '<div style="font-size:12pt;font-weight:bold;margin-top:8px;font-family:monospace;letter-spacing:2px">FL-................</div>' +
+        '</td>' +
+        '<td style="width:25%;text-align:center;border:2px solid #000;padding:4px;vertical-align:middle;direction:rtl">' +
+        '<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%">' +
+        '<img src="data:image/png;base64,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" style="width:55px;height:55px;margin-bottom:5px;object-fit:contain" alt="LISCO Logo"/>' +
+        '<div style="font-size:9pt;font-weight:bold">الشركة الليبية للحديد والصلب</div>' +
+        '<div style="font-size:8pt;font-weight:bold;margin-top:2px">LISCO</div>' +
+        '<div style="font-size:7pt;margin-top:1px">Libyan Iron & Steel Company</div>' +
+        '</div>' +
+        '</td>' +
+        '</tr>' +
+        '</table>' +
+
+        '<table style="width:100%;border-collapse:collapse;margin-bottom:5px">' +
+        '<tr>' +
+        '<td style="border:1px solid #000;padding:3px;text-align:left;font-size:9pt;width:10%"><b>ST/</b> ' + (record.stNumber || '') + '</td>' +
+        '<td style="border:1px solid #000;padding:3px;text-align:left;font-size:9pt;width:12%"><b>TS:</b> ' + (record.tsNumber || '') + '</td>' +
+        '<td style="border:1px solid #000;padding:3px;text-align:left;font-size:9pt;width:12%"><b>TS-Ref</b> ' + (record.tsRef || '') + '</td>' +
+        '<td style="border:1px solid #000;padding:3px;text-align:left;font-size:9pt;width:25%"><b>' + t('costCenterDash') + '</b> ' + record.costCenter + '</td>' +
+        '<td style="border:1px solid #000;padding:3px;text-align:left;font-size:9pt;width:22%"><b>' + t('issueDateLabel') + '</b> ' + formattedDate + '</td>' +
+        '<td style="border:1px solid #000;padding:3px;text-align:left;font-size:9pt;width:19%"><b>' + t('recDate') + '</b> </td>' +
+        '</tr>' +
+        '</table>' +
+
+        '<table style="width:100%;border-collapse:collapse;margin-bottom:5px">' +
+        '<tr>' +
+        '<td style="border:1px solid #000;padding:3px;text-align:center;font-size:9pt">' + t('newItem') + ' (&nbsp;&nbsp;&nbsp;&nbsp;)</td>' +
+        '<td style="border:1px solid #000;padding:3px;text-align:center;font-size:9pt">' + t('directCharge') + ' (&nbsp;&nbsp;&nbsp;&nbsp;)</td>' +
+        '<td style="border:1px solid #000;padding:3px;text-align:center;font-size:9pt">' + t('shutDown') + ' (&nbsp;&nbsp;&nbsp;&nbsp;)</td>' +
+        '<td style="border:1px solid #000;padding:3px;text-align:center;font-size:9pt">' + t('amendment') + ' - (&nbsp;&nbsp;&nbsp;&nbsp;)</td>' +
+        '<td style="border:1px solid #000;padding:3px;text-align:center;font-size:9pt">' + t('recDate') + ' &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>' +
+        '</tr>' +
+        '</table>' +
+
+        '<table style="width:100%;border-collapse:collapse;border:2px solid #000">' +
+        '<thead>' +
+        '<tr style="background:#f0f0f0">' +
+        '<th style="border:1px solid #000;padding:5px;font-size:9pt;width:5%;text-align:center">' + t('sNo') + '</th>' +
+        '<th style="border:1px solid #000;padding:5px;font-size:9pt;width:12%;text-align:center">' + t('code') + '</th>' +
+        '<th style="border:1px solid #000;padding:5px;font-size:9pt;width:40%;text-align:center">' + t('briefDesc') + '</th>' +
+        '<th style="border:1px solid #000;padding:5px;font-size:9pt;width:8%;text-align:center">' + t('unit') + '</th>' +
+        '<th style="border:1px solid #000;padding:5px;font-size:9pt;width:8%;text-align:center">Approx Value</th>' +
+        '<th style="border:1px solid #000;padding:5px;font-size:9pt;width:8%;text-align:center">' + t('qty') + '</th>' +
+        '<th style="border:1px solid #000;padding:5px;font-size:9pt;width:9%;text-align:center">' + t('installYN').replace(/\\n/g, '<br>') + '</th>' +
+        '<th style="border:1px solid #000;padding:5px;font-size:9pt;width:9%;text-align:center">' + t('repairYN').replace(/\\n/g, '<br>') + '</th>' +
+        '<th style="border:1px solid #000;padding:5px;font-size:9pt;width:9%;text-align:center">' + t('specLabel') + '</th>' +
+        '</tr>' +
+        '</thead>' +
+        '<tbody>' + itemsHtml + '</tbody>' +
+        '</table>' +
+
+        '<div style="border:1px solid #000;border-top:none;padding:5px;font-size:10pt;font-weight:bold">' + t('expectedTotal') + '</div>' +
+
+        (record.notes ? '<div style="border:1px solid #000;padding:8px;margin-top:10px;font-size:10pt;background:#f9f9f9;direction:rtl;text-align:right"><strong>ملاحظات:</strong> ' + record.notes + '</div>' : '') +
+        '<table style="width:100%;border-collapse:collapse;margin-top:10px;border:2px solid #000">' +
+        '<tr style="font-size:8pt">' +
+        '<td style="border:1px solid #000;padding:8px;text-align:left;width:25%;vertical-align:top;height:70px">' +
+        '<div style="font-weight:bold;font-size:9pt">' + t('originatorSign') + ' ' + record.originator + '</div>' +
+        '<div style="margin-top:3px;font-size:8pt">' + t('signature') + '</div>' +
+        '<div style="margin-top:15px;border-top:1px solid #000;margin-right:10px"></div>' +
+        '<div style="margin-top:3px;font-size:8pt">' + t('dateLabel') + ' ' + formattedDate + '</div>' +
+        '</td>' +
+        '<td style="border:1px solid #000;padding:8px;text-align:left;width:25%;vertical-align:top;height:70px">' +
+        '<div style="font-weight:bold;font-size:9pt">' + t('managerAppr') + '</div>' +
+        '<div style="margin-top:3px;font-size:8pt">' + (record.managerName || '&nbsp;') + '</div>' +
+        '<div style="margin-top:3px;font-size:8pt">' + t('signature') + '</div>' +
+        '<div style="margin-top:15px;border-top:1px solid #000;margin-right:10px"></div>' +
+        '<div style="margin-top:3px;font-size:8pt">' + t('dateLabel') + ' </div>' +
+        '</td>' +
+        '<td style="border:1px solid #000;padding:8px;text-align:left;width:25%;vertical-align:top;height:70px">' +
+        '<div style="font-weight:bold;font-size:9pt">' + t('gmAppr') + '</div>' +
+        '<div style="margin-top:3px;font-size:8pt">' + (record.gmName || '&nbsp;') + '</div>' +
+        '<div style="margin-top:3px;font-size:8pt">' + t('signature') + '</div>' +
+        '<div style="margin-top:15px;border-top:1px solid #000;margin-right:10px"></div>' +
+        '<div style="margin-top:3px;font-size:8pt">' + t('dateLabel') + ' </div>' +
+        '</td>' +
+        '<td style="border:1px solid #000;padding:8px;text-align:left;width:25%;vertical-align:top;height:70px">' +
+        '<div style="font-weight:bold;font-size:9pt">' + t('userDirector') + '</div>' +
+        '<div style="margin-top:3px;font-size:8pt">' + (record.directorName || '&nbsp;') + '</div>' +
+        '<div style="margin-top:3px;font-size:8pt">' + t('signature') + '</div>' +
+        '<div style="margin-top:15px;border-top:1px solid #000;margin-right:10px"></div>' +
+        '<div style="margin-top:3px;font-size:8pt">' + t('dateLabel') + ' </div>' +
+        '</td>' +
+        '</tr>' +
+        '</table>' +
+
+        '<table style="width:100%;border-collapse:collapse;margin-top:5px">' +
+        '<tr>' +
+        '<td style="border:1px solid #000;padding:3px;text-align:left;font-size:9pt;width:50%"><b>' + t('plMat') + '</b> </td>' +
+        '<td style="border:1px solid #000;padding:3px;text-align:left;font-size:9pt;width:50%"><b>' + t('stMet') + '</b> </td>' +
+        '</tr>' +
+        '</table>' +
+        '<table style="width:100%;border-collapse:collapse;margin-top:5px">' +
+        '<tr>' +
+        '<td style="border:1px solid #000;padding:6px;text-align:right;font-size:9pt;width:60%;direction:rtl">رفعت هذه الطلبية بناءاً على ' + (record.requestedByDept || '') + '</td>' +
+        '<td style="border:1px solid #000;padding:6px;text-align:right;font-size:9pt;width:40%;direction:rtl">المرفقات : ' + (record.attachments || '') + '</td>' +
+        '</tr>' +
+        '</table>' +
+        '<div style="text-align:left;font-size:8pt;margin-top:4px;direction:ltr">' + (record.reqType === 'emergency' ? '2000/10/1 [8-5120-2-1-001]' : '2000/10/1 [8-5120-2-1-002]') + '</div>' +
+
+        '</div>';
+}
+
+function printRecord(id) {
+    var record = records.find(function(r) { return r.id == id; });
+    if (!record) return;
+
+    var html = generateA4HTML(record);
+    printHTMLDocument(record.orNumber, html);
+}
+
+function previewBeforeSave() {
+    try {
+        var items = getItemsFromForm();
+        console.log('Preview items:', items);
+        if (items.length === 0) {
+            showToast(t('addAtLeastOneItem'), 'error');
+            return;
+        }
+        var record = {
+            orNumber: document.getElementById('orNumberFull').value,
+            issueDate: document.getElementById('issueDate').value,
+            costCenter: document.getElementById('costCenter').value,
+            stNumber: document.getElementById('stNumber').value,
+            tsNumber: document.getElementById('tsNumber').value,
+            tsRef: document.getElementById('tsRef').value,
+            originator: document.getElementById('originator').value,
+            managerName: document.getElementById('managerName').value,
+            gmName: document.getElementById('gmName').value,
+            directorName: document.getElementById('directorName').value,
+            requestedByDept: document.getElementById('requestedByDept').value,
+            attachments: document.getElementById('attachments').value,
+            notes: document.getElementById('notes').value,
+            reqType: document.querySelector('input[name="reqType"]:checked').value,
+            status: document.getElementById('status').value,
+            items: items
+        };
+        document.getElementById('a4PreviewContent').innerHTML = generateA4HTML(record);
+        document.getElementById('previewModal').classList.add('show');
+    } catch (e) {
+        console.error('Preview error:', e);
+        showToast('Error: ' + e.message, 'error');
+    }
+}
+
+function closePreviewModal() {
+    document.getElementById('previewModal').classList.remove('show');
+}
+
+function printA4() {
+    var content = document.getElementById('a4PreviewContent').innerHTML;
+    printHTMLDocument(currentLang === 'ar' ? 'معاينة' : 'Preview', content);
+}
+
+function printSelected() {
+    var filtered = getFilteredRecords();
+    if (filtered.length === 0) {
+        showToast(t('noRecordsPrint'), 'error');
+        return;
+    }
+
+    var allContent = filtered.map(function(r) {
+        return generateA4HTML(r) + '<div style="page-break-after:always"></div>';
+    }).join('');
+    printHTMLDocument(currentLang === 'ar' ? 'طباعة_الكل' : 'Print_All', allContent);
+}
+
+
+// ===== EXPORT SINGLE RECORD TO WORD (from modal) =====
+function exportCurrentToWord() {
+    var items = getItemsFromForm();
+    if (items.length === 0) {
+        showToast(t('addAtLeastOneItem'), 'error');
+        return;
+    }
+
+    // Build a temp record from current form data
+    var tempRecord = {
+        id: editingId || Date.now().toString(),
+        orNumber: document.getElementById('orNumberFull').value,
+        issueDate: document.getElementById('issueDate').value,
+        costCenter: document.getElementById('costCenter').value,
+        stNumber: document.getElementById('stNumber').value,
+        tsNumber: document.getElementById('tsNumber').value,
+        tsRef: document.getElementById('tsRef').value,
+        originator: document.getElementById('originator').value,
+        managerName: document.getElementById('managerName').value,
+        gmName: document.getElementById('gmName').value,
+        directorName: document.getElementById('directorName').value,
+        requestedByDept: document.getElementById('requestedByDept').value,
+        attachments: document.getElementById('attachments').value,
+        notes: document.getElementById('notes').value,
+        reqType: document.querySelector('input[name="reqType"]:checked').value,
+        status: document.getElementById('status').value,
+        items: items
+    };
+
+    exportSingleRecordToWord(tempRecord);
+}
+
+function exportSingleRecordToWord(record) {
+    var htmlContent = '<!DOCTYPE html>';
+    htmlContent += '<html dir="ltr" lang="' + currentLang + '">';
+    htmlContent += '<head><meta charset="UTF-8"><title>' + (record.orNumber || 'OR') + '</title>';
+    htmlContent += '<style>';
+    htmlContent += 'body { font-family: Arial, sans-serif; font-size: 10pt; }';
+    htmlContent += 'table { width: 100%; border-collapse: collapse; }';
+    htmlContent += 'td, th { border: 1px solid #000; padding: 5px; text-align: left; }';
+    htmlContent += 'th { background-color: #f0f0f0; font-weight: bold; }';
+    htmlContent += '.header-cell { border: 2px solid #000; text-align: center; vertical-align: middle; }';
+    htmlContent += '.logo-cell { text-align: center; vertical-align: middle; }';
+    htmlContent += '.signature-cell { border: 1px solid #000; padding: 8px; vertical-align: top; height: 90px; }';
+    htmlContent += '@page { size: A4 landscape; margin: 10mm; }';
+    htmlContent += '</style></head><body>';
+
+    // Header table
+    htmlContent += '<table style="margin-bottom:5px">';
+    htmlContent += '<tr>';
+    htmlContent += '<td style="width:25%;text-align:center;border:2px solid #000;padding:8px;vertical-align:middle;direction:rtl" class="header-cell">';
+    htmlContent += '<div style="font-size:11pt;font-weight:bold">' + t('sector1') + '</div>';
+    htmlContent += '<div style="font-size:10pt;font-weight:bold;margin-top:3px">' + t('generalAdmin') + '</div>';
+    htmlContent += '<div style="font-size:9pt;margin-top:3px">' + t('storageControl') + '</div>';
+    htmlContent += '</td>';
+    htmlContent += '<td style="width:25%;text-align:center;border:2px solid #000;padding:8px;vertical-align:middle" class="header-cell">';
+    htmlContent += '<div style="font-size:12pt;font-weight:bold">' + t('materialReq') + '</div>';
+    htmlContent += '</td>';
+    htmlContent += '<td style="width:25%;text-align:center;border:2px solid #000;padding:8px;vertical-align:middle" class="header-cell">';
+    htmlContent += '<div style="font-size:12pt;font-weight:bold;font-family:monospace;letter-spacing:2px">' + (record.orNumber || '') + '</div>';
+    htmlContent += '<div style="font-size:12pt;font-weight:bold;margin-top:8px;font-family:monospace;letter-spacing:2px">FL-................</div>';
+    htmlContent += '</td>';
+    htmlContent += '<td style="width:25%;text-align:center;border:2px solid #000;padding:8px;vertical-align:middle;direction:rtl" class="header-cell logo-cell">';
+    htmlContent += '<div style="font-size:10pt;font-weight:bold;line-height:1.4">';
+    htmlContent += 'الشركة الليبية للحديد والصلب<br>';
+    htmlContent += '<span style="font-size:8pt;font-weight:normal">LISCO</span><br>';
+    htmlContent += '<span style="font-size:8pt;font-weight:normal">Libyan Iron & Steel Company</span>';
+    htmlContent += '</div>';
+    htmlContent += '</td>';
+    htmlContent += '</tr>';
+    htmlContent += '</table>';
+
+    // Info row
+    var dateParts = record.issueDate.split('-');
+    var formattedDate = dateParts[2] + '/' + dateParts[1] + '/' + dateParts[0];
+
+    htmlContent += '<table style="margin-bottom:5px">';
+    htmlContent += '<tr>';
+    htmlContent += '<td style="border:1px solid #000;padding:5px;text-align:left;font-size:9pt;width:10%"><b>ST/</b> ' + (record.stNumber || '') + '</td>';
+    htmlContent += '<td style="border:1px solid #000;padding:5px;text-align:left;font-size:9pt;width:12%"><b>TS:</b> ' + (record.tsNumber || '') + '</td>';
+    htmlContent += '<td style="border:1px solid #000;padding:5px;text-align:left;font-size:9pt;width:12%"><b>TS-Ref</b> ' + (record.tsRef || '') + '</td>';
+    htmlContent += '<td style="border:1px solid #000;padding:5px;text-align:left;font-size:9pt;width:25%"><b>' + t('costCenterDash') + '</b> ' + record.costCenter + '</td>';
+    htmlContent += '<td style="border:1px solid #000;padding:5px;text-align:left;font-size:9pt;width:22%"><b>' + t('issueDateLabel') + '</b> ' + formattedDate + '</td>';
+    htmlContent += '<td style="border:1px solid #000;padding:5px;text-align:left;font-size:9pt;width:19%"><b>' + t('recDate') + '</b> </td>';
+    htmlContent += '</tr>';
+    htmlContent += '</table>';
+
+    // Type row
+    htmlContent += '<table style="margin-bottom:5px">';
+    htmlContent += '<tr>';
+    htmlContent += '<td style="border:1px solid #000;padding:5px;text-align:center;font-size:9pt">' + t('newItem') + ' (&nbsp;&nbsp;&nbsp;&nbsp;)</td>';
+    htmlContent += '<td style="border:1px solid #000;padding:5px;text-align:center;font-size:9pt">' + t('directCharge') + ' (&nbsp;&nbsp;&nbsp;&nbsp;)</td>';
+    htmlContent += '<td style="border:1px solid #000;padding:5px;text-align:center;font-size:9pt">' + t('shutDown') + ' (&nbsp;&nbsp;&nbsp;&nbsp;)</td>';
+    htmlContent += '<td style="border:1px solid #000;padding:5px;text-align:center;font-size:9pt">' + t('amendment') + ' - (&nbsp;&nbsp;&nbsp;&nbsp;)</td>';
+    htmlContent += '<td style="border:1px solid #000;padding:5px;text-align:center;font-size:9pt">' + t('recDate') + ' &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>';
+    htmlContent += '</tr>';
+    htmlContent += '</table>';
+
+    // Items table
+    htmlContent += '<table style="border:2px solid #000">';
+    htmlContent += '<thead>';
+    htmlContent += '<tr style="background:#f0f0f0">';
+    htmlContent += '<th style="border:1px solid #000;padding:5px;font-size:9pt;width:5%;text-align:center">' + t('sNo') + '</th>';
+    htmlContent += '<th style="border:1px solid #000;padding:5px;font-size:9pt;width:12%;text-align:center">' + t('code') + '</th>';
+    htmlContent += '<th style="border:1px solid #000;padding:5px;font-size:9pt;width:40%;text-align:center">' + t('briefDesc') + '</th>';
+    htmlContent += '<th style="border:1px solid #000;padding:5px;font-size:9pt;width:8%;text-align:center">' + t('unit') + '</th>';
+    htmlContent += '<th style="border:1px solid #000;padding:5px;font-size:9pt;width:8%;text-align:center">Approx Value</th>';
+    htmlContent += '<th style="border:1px solid #000;padding:5px;font-size:9pt;width:8%;text-align:center">' + t('qty') + '</th>';
+    htmlContent += '<th style="border:1px solid #000;padding:5px;font-size:9pt;width:9%;text-align:center">' + t('installYN').replace(/\n/g, '<br>') + '</th>';
+    htmlContent += '<th style="border:1px solid #000;padding:5px;font-size:9pt;width:9%;text-align:center">' + t('repairYN').replace(/\n/g, '<br>') + '</th>';
+    htmlContent += '<th style="border:1px solid #000;padding:5px;font-size:9pt;width:9%;text-align:center">' + t('specLabel') + '</th>';
+    htmlContent += '</tr>';
+    htmlContent += '</thead>';
+    htmlContent += '<tbody>';
+
+    record.items.forEach(function(item, idx) {
+        htmlContent += '<tr>';
+        htmlContent += '<td style="padding:6px;text-align:center;border-right:1px solid #000">' + (idx + 1) + '</td>';
+        htmlContent += '<td style="padding:6px;text-align:center;border-right:1px solid #000">' + item.code + '</td>';
+        htmlContent += '<td style="padding:6px;text-align:left;border-right:1px solid #000">' + item.description + '</td>';
+        htmlContent += '<td style="padding:6px;text-align:center;border-right:1px solid #000">' + item.unit + '</td>';
+        htmlContent += '<td style="padding:6px;text-align:center;border-right:1px solid #000">' + (item.approxValue || '') + '</td>';
+        htmlContent += '<td style="padding:6px;text-align:center;border-right:1px solid #000">' + item.qty + '</td>';
+        htmlContent += '<td style="padding:6px;text-align:center;border-right:1px solid #000">' + (item.install || '') + '</td>';
+        htmlContent += '<td style="padding:6px;text-align:center;border-right:1px solid #000">' + (item.repair || '') + '</td>';
+        htmlContent += '<td style="padding:6px;text-align:center">' + (item.spec || '') + '</td>';
+        htmlContent += '</tr>';
+    });
+
+    htmlContent += '</tbody></table>';
+
+    // Expected Total
+    htmlContent += '<div style="border:1px solid #000;border-top:none;padding:5px;font-size:10pt;font-weight:bold">' + t('expectedTotal') + '</div>';
+
+    // Signatures
+    htmlContent += '<table style="margin-top:10px;border:2px solid #000">';
+    htmlContent += '<tr>';
+    htmlContent += '<td class="signature-cell" style="width:25%">';
+    htmlContent += '<div style="font-weight:bold;font-size:9pt">' + t('originatorSign') + ' ' + record.originator + '</div>';
+    htmlContent += '<div style="margin-top:12px;font-size:8pt">' + t('signature') + '</div>';
+    htmlContent += '<div style="margin-top:25px;border-top:1px solid #000;margin-right:10px"></div>';
+    htmlContent += '<div style="margin-top:6px;font-size:8pt">' + t('dateLabel') + ' ' + formattedDate + '</div>';
+    htmlContent += '</td>';
+    htmlContent += '<td class="signature-cell" style="width:25%">';
+    htmlContent += '<div style="font-weight:bold;font-size:9pt">' + t('managerAppr') + '</div>';
+    htmlContent += '<div style="margin-top:6px;font-size:8pt">' + (record.managerName || '&nbsp;') + '</div>';
+    htmlContent += '<div style="margin-top:12px;font-size:8pt">' + t('signature') + '</div>';
+    htmlContent += '<div style="margin-top:25px;border-top:1px solid #000;margin-right:10px"></div>';
+    htmlContent += '<div style="margin-top:6px;font-size:8pt">' + t('dateLabel') + ' </div>';
+    htmlContent += '</td>';
+    htmlContent += '<td class="signature-cell" style="width:25%">';
+    htmlContent += '<div style="font-weight:bold;font-size:9pt">' + t('gmAppr') + '</div>';
+    htmlContent += '<div style="margin-top:6px;font-size:8pt">' + (record.gmName || '&nbsp;') + '</div>';
+    htmlContent += '<div style="margin-top:12px;font-size:8pt">' + t('signature') + '</div>';
+    htmlContent += '<div style="margin-top:25px;border-top:1px solid #000;margin-right:10px"></div>';
+    htmlContent += '<div style="margin-top:6px;font-size:8pt">' + t('dateLabel') + ' </div>';
+    htmlContent += '</td>';
+    htmlContent += '<td class="signature-cell" style="width:25%">';
+    htmlContent += '<div style="font-weight:bold;font-size:9pt">' + t('userDirector') + '</div>';
+    htmlContent += '<div style="margin-top:6px;font-size:8pt">' + (record.directorName || '&nbsp;') + '</div>';
+    htmlContent += '<div style="margin-top:12px;font-size:8pt">' + t('signature') + '</div>';
+    htmlContent += '<div style="margin-top:25px;border-top:1px solid #000;margin-right:10px"></div>';
+    htmlContent += '<div style="margin-top:6px;font-size:8pt">' + t('dateLabel') + ' </div>';
+    htmlContent += '</td>';
+    htmlContent += '</tr></table>';
+
+    // PL & Mat / St & Met
+    htmlContent += '<table style="margin-top:5px">';
+    htmlContent += '<tr>';
+    htmlContent += '<td style="border:1px solid #000;padding:5px;text-align:left;font-size:9pt;width:50%"><b>' + t('plMat') + '</b> </td>';
+    htmlContent += '<td style="border:1px solid #000;padding:5px;text-align:left;font-size:9pt;width:50%"><b>' + t('stMet') + '</b> </td>';
+    htmlContent += '</tr></table>';
+
+    // Bottom row
+    htmlContent += '<table style="margin-top:5px">';
+    htmlContent += '<tr>';
+    htmlContent += '<td style="border:1px solid #000;padding:6px;text-align:right;font-size:9pt;width:60%;direction:rtl">رفعت هذه الطلبية بناءاً على ' + (record.requestedByDept || '') + '</td>';
+    htmlContent += '<td style="border:1px solid #000;padding:6px;text-align:right;font-size:9pt;width:40%;direction:rtl">المرفقات : ' + (record.attachments || '') + '</td>';
+    htmlContent += '</tr></table>';
+
+    // ISO
+    htmlContent += '<div style="text-align:left;font-size:8pt;margin-top:8px;direction:ltr">' + (record.reqType === 'emergency' ? '2000/10/1 [8-5120-2-1-001]' : '2000/10/1 [8-5120-2-1-002]') + '</div>';
+
+    htmlContent += '</body></html>';
+
+    // Create blob and download
+    var blob = new Blob(['\ufeff', htmlContent], {
+        type: 'application/msword'
+    });
+
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = (record.orNumber || 'OR') + '_' + record.issueDate + '.doc';
+    a.click();
+    URL.revokeObjectURL(url);
+
+    showToast(t('exportWordSuccess'), 'success');
+}
+
+// ===== EXPORT ALL RECORDS TO WORD (from main page) =====
+function exportToWord() {
+    var filtered = getFilteredRecords();
+    if (filtered.length === 0) {
+        showToast(t('noRecordsPrint'), 'error');
+        return;
+    }
+
+    var htmlContent = '<!DOCTYPE html>';
+    htmlContent += '<html dir="ltr" lang="' + currentLang + '">';
+    htmlContent += '<head><meta charset="UTF-8"><title>OR Export</title>';
+    htmlContent += '<style>';
+    htmlContent += 'body { font-family: Arial, sans-serif; font-size: 10pt; }';
+    htmlContent += 'table { width: 100%; border-collapse: collapse; }';
+    htmlContent += 'td, th { border: 1px solid #000; padding: 5px; text-align: left; }';
+    htmlContent += 'th { background-color: #f0f0f0; font-weight: bold; }';
+    htmlContent += '.header-cell { border: 2px solid #000; text-align: center; vertical-align: middle; }';
+    htmlContent += '.logo-cell { text-align: center; vertical-align: middle; }';
+    htmlContent += '.signature-cell { border: 1px solid #000; padding: 8px; vertical-align: top; height: 90px; }';
+    htmlContent += '@page { size: A4 landscape; margin: 10mm; }';
+    htmlContent += '</style></head><body>';
+
+    filtered.forEach(function(record, idx) {
+        if (idx > 0) {
+            htmlContent += '<div style="page-break-after:always;"></div>';
+        }
+
+        // Header table
+        htmlContent += '<table style="margin-bottom:5px">';
+        htmlContent += '<tr>';
+        htmlContent += '<td style="width:25%;text-align:center;border:2px solid #000;padding:8px;vertical-align:middle;direction:rtl" class="header-cell">';
+        htmlContent += '<div style="font-size:11pt;font-weight:bold">' + t('sector1') + '</div>';
+        htmlContent += '<div style="font-size:10pt;font-weight:bold;margin-top:3px">' + t('generalAdmin') + '</div>';
+        htmlContent += '<div style="font-size:9pt;margin-top:3px">' + t('storageControl') + '</div>';
+        htmlContent += '</td>';
+        htmlContent += '<td style="width:25%;text-align:center;border:2px solid #000;padding:8px;vertical-align:middle" class="header-cell">';
+        htmlContent += '<div style="font-size:12pt;font-weight:bold">' + t('materialReq') + '</div>';
+        htmlContent += '</td>';
+        htmlContent += '<td style="width:25%;text-align:center;border:2px solid #000;padding:8px;vertical-align:middle" class="header-cell">';
+        htmlContent += '<div style="font-size:12pt;font-weight:bold;font-family:monospace;letter-spacing:2px">' + (record.orNumber || '') + '</div>';
+        htmlContent += '<div style="font-size:12pt;font-weight:bold;margin-top:8px;font-family:monospace;letter-spacing:2px">FL-................</div>';
+        htmlContent += '</td>';
+        htmlContent += '<td style="width:25%;text-align:center;border:2px solid #000;padding:8px;vertical-align:middle;direction:rtl" class="header-cell logo-cell">';
+        htmlContent += '<div style="font-size:10pt;font-weight:bold;line-height:1.4">';
+        htmlContent += 'الشركة الليبية للحديد والصلب<br>';
+        htmlContent += '<span style="font-size:8pt;font-weight:normal">LISCO</span><br>';
+        htmlContent += '<span style="font-size:8pt;font-weight:normal">Libyan Iron & Steel Company</span>';
+        htmlContent += '</div>';
+        htmlContent += '</td>';
+        htmlContent += '</tr>';
+        htmlContent += '</table>';
+
+        // Info row
+        var dateParts = record.issueDate.split('-');
+        var formattedDate = dateParts[2] + '/' + dateParts[1] + '/' + dateParts[0];
+
+        htmlContent += '<table style="margin-bottom:5px">';
+        htmlContent += '<tr>';
+        htmlContent += '<td style="border:1px solid #000;padding:5px;text-align:left;font-size:9pt;width:10%"><b>ST/</b> ' + (record.stNumber || '') + '</td>';
+        htmlContent += '<td style="border:1px solid #000;padding:5px;text-align:left;font-size:9pt;width:12%"><b>TS:</b> ' + (record.tsNumber || '') + '</td>';
+        htmlContent += '<td style="border:1px solid #000;padding:5px;text-align:left;font-size:9pt;width:12%"><b>TS-Ref</b> ' + (record.tsRef || '') + '</td>';
+        htmlContent += '<td style="border:1px solid #000;padding:5px;text-align:left;font-size:9pt;width:25%"><b>' + t('costCenterDash') + '</b> ' + record.costCenter + '</td>';
+        htmlContent += '<td style="border:1px solid #000;padding:5px;text-align:left;font-size:9pt;width:22%"><b>' + t('issueDateLabel') + '</b> ' + formattedDate + '</td>';
+        htmlContent += '<td style="border:1px solid #000;padding:5px;text-align:left;font-size:9pt;width:19%"><b>' + t('recDate') + '</b> </td>';
+        htmlContent += '</tr>';
+        htmlContent += '</table>';
+
+        // Type row
+        htmlContent += '<table style="margin-bottom:5px">';
+        htmlContent += '<tr>';
+        htmlContent += '<td style="border:1px solid #000;padding:5px;text-align:center;font-size:9pt">' + t('newItem') + ' (&nbsp;&nbsp;&nbsp;&nbsp;)</td>';
+        htmlContent += '<td style="border:1px solid #000;padding:5px;text-align:center;font-size:9pt">' + t('directCharge') + ' (&nbsp;&nbsp;&nbsp;&nbsp;)</td>';
+        htmlContent += '<td style="border:1px solid #000;padding:5px;text-align:center;font-size:9pt">' + t('shutDown') + ' (&nbsp;&nbsp;&nbsp;&nbsp;)</td>';
+        htmlContent += '<td style="border:1px solid #000;padding:5px;text-align:center;font-size:9pt">' + t('amendment') + ' - (&nbsp;&nbsp;&nbsp;&nbsp;)</td>';
+        htmlContent += '<td style="border:1px solid #000;padding:5px;text-align:center;font-size:9pt">' + t('recDate') + ' &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>';
+        htmlContent += '</tr>';
+        htmlContent += '</table>';
+
+        // Items table
+        htmlContent += '<table style="border:2px solid #000">';
+        htmlContent += '<thead>';
+        htmlContent += '<tr style="background:#f0f0f0">';
+        htmlContent += '<th style="border:1px solid #000;padding:5px;font-size:9pt;width:5%;text-align:center">' + t('sNo') + '</th>';
+        htmlContent += '<th style="border:1px solid #000;padding:5px;font-size:9pt;width:12%;text-align:center">' + t('code') + '</th>';
+        htmlContent += '<th style="border:1px solid #000;padding:5px;font-size:9pt;width:40%;text-align:center">' + t('briefDesc') + '</th>';
+        htmlContent += '<th style="border:1px solid #000;padding:5px;font-size:9pt;width:8%;text-align:center">' + t('unit') + '</th>';
+        htmlContent += '<th style="border:1px solid #000;padding:5px;font-size:9pt;width:8%;text-align:center">Approx Value</th>';
+        htmlContent += '<th style="border:1px solid #000;padding:5px;font-size:9pt;width:8%;text-align:center">' + t('qty') + '</th>';
+        htmlContent += '<th style="border:1px solid #000;padding:5px;font-size:9pt;width:9%;text-align:center">' + t('installYN').replace(/\n/g, '<br>') + '</th>';
+        htmlContent += '<th style="border:1px solid #000;padding:5px;font-size:9pt;width:9%;text-align:center">' + t('repairYN').replace(/\n/g, '<br>') + '</th>';
+        htmlContent += '<th style="border:1px solid #000;padding:5px;font-size:9pt;width:9%;text-align:center">' + t('specLabel') + '</th>';
+        htmlContent += '</tr>';
+        htmlContent += '</thead>';
+        htmlContent += '<tbody>';
+
+        record.items.forEach(function(item, idx) {
+            htmlContent += '<tr>';
+            htmlContent += '<td style="padding:6px;text-align:center;border-right:1px solid #000">' + (idx + 1) + '</td>';
+            htmlContent += '<td style="padding:6px;text-align:center;border-right:1px solid #000">' + item.code + '</td>';
+            htmlContent += '<td style="padding:6px;text-align:left;border-right:1px solid #000">' + item.description + '</td>';
+            htmlContent += '<td style="padding:6px;text-align:center;border-right:1px solid #000">' + item.unit + '</td>';
+            htmlContent += '<td style="padding:6px;text-align:center;border-right:1px solid #000">' + (item.approxValue || '') + '</td>';
+            htmlContent += '<td style="padding:6px;text-align:center;border-right:1px solid #000">' + item.qty + '</td>';
+            htmlContent += '<td style="padding:6px;text-align:center;border-right:1px solid #000">' + (item.install || '') + '</td>';
+            htmlContent += '<td style="padding:6px;text-align:center;border-right:1px solid #000">' + (item.repair || '') + '</td>';
+            htmlContent += '<td style="padding:6px;text-align:center">' + (item.spec || '') + '</td>';
+            htmlContent += '</tr>';
+        });
+
+        htmlContent += '</tbody></table>';
+
+        // Expected Total
+        htmlContent += '<div style="border:1px solid #000;border-top:none;padding:5px;font-size:10pt;font-weight:bold">' + t('expectedTotal') + '</div>';
+
+        // Signatures
+        if (record.notes) { htmlContent += '<div style="border:1px solid #000;padding:8px;margin-top:10px;font-size:10pt;background:#f9f9f9;direction:rtl;text-align:right"><strong>ملاحظات:</strong> ' + record.notes + '</div>'; }
+        htmlContent += '<table style="margin-top:10px;border:2px solid #000">';
+        htmlContent += '<tr>';
+        htmlContent += '<td class="signature-cell" style="width:25%">';
+        htmlContent += '<div style="font-weight:bold;font-size:9pt">' + t('originatorSign') + ' ' + record.originator + '</div>';
+        htmlContent += '<div style="margin-top:12px;font-size:8pt">' + t('signature') + '</div>';
+        htmlContent += '<div style="margin-top:25px;border-top:1px solid #000;margin-right:10px"></div>';
+        htmlContent += '<div style="margin-top:6px;font-size:8pt">' + t('dateLabel') + ' ' + formattedDate + '</div>';
+        htmlContent += '</td>';
+        htmlContent += '<td class="signature-cell" style="width:25%">';
+        htmlContent += '<div style="font-weight:bold;font-size:9pt">' + t('managerAppr') + '</div>';
+        htmlContent += '<div style="margin-top:6px;font-size:8pt">' + (record.managerName || '&nbsp;') + '</div>';
+        htmlContent += '<div style="margin-top:12px;font-size:8pt">' + t('signature') + '</div>';
+        htmlContent += '<div style="margin-top:25px;border-top:1px solid #000;margin-right:10px"></div>';
+        htmlContent += '<div style="margin-top:6px;font-size:8pt">' + t('dateLabel') + ' </div>';
+        htmlContent += '</td>';
+        htmlContent += '<td class="signature-cell" style="width:25%">';
+        htmlContent += '<div style="font-weight:bold;font-size:9pt">' + t('gmAppr') + '</div>';
+        htmlContent += '<div style="margin-top:6px;font-size:8pt">' + (record.gmName || '&nbsp;') + '</div>';
+        htmlContent += '<div style="margin-top:12px;font-size:8pt">' + t('signature') + '</div>';
+        htmlContent += '<div style="margin-top:25px;border-top:1px solid #000;margin-right:10px"></div>';
+        htmlContent += '<div style="margin-top:6px;font-size:8pt">' + t('dateLabel') + ' </div>';
+        htmlContent += '</td>';
+        htmlContent += '<td class="signature-cell" style="width:25%">';
+        htmlContent += '<div style="font-weight:bold;font-size:9pt">' + t('userDirector') + '</div>';
+        htmlContent += '<div style="margin-top:6px;font-size:8pt">' + (record.directorName || '&nbsp;') + '</div>';
+        htmlContent += '<div style="margin-top:12px;font-size:8pt">' + t('signature') + '</div>';
+        htmlContent += '<div style="margin-top:25px;border-top:1px solid #000;margin-right:10px"></div>';
+        htmlContent += '<div style="margin-top:6px;font-size:8pt">' + t('dateLabel') + ' </div>';
+        htmlContent += '</td>';
+        htmlContent += '</tr></table>';
+
+        // PL & Mat / St & Met
+        htmlContent += '<table style="margin-top:5px">';
+        htmlContent += '<tr>';
+        htmlContent += '<td style="border:1px solid #000;padding:5px;text-align:left;font-size:9pt;width:50%"><b>' + t('plMat') + '</b> </td>';
+        htmlContent += '<td style="border:1px solid #000;padding:5px;text-align:left;font-size:9pt;width:50%"><b>' + t('stMet') + '</b> </td>';
+        htmlContent += '</tr></table>';
+
+        // Bottom row
+        htmlContent += '<table style="margin-top:5px">';
+        htmlContent += '<tr>';
+        htmlContent += '<td style="border:1px solid #000;padding:6px;text-align:right;font-size:9pt;width:60%;direction:rtl">رفعت هذه الطلبية بناءاً على ' + (record.requestedByDept || '') + '</td>';
+        htmlContent += '<td style="border:1px solid #000;padding:6px;text-align:right;font-size:9pt;width:40%;direction:rtl">المرفقات : ' + (record.attachments || '') + '</td>';
+        htmlContent += '</tr></table>';
+
+        // ISO
+        htmlContent += '<div style="text-align:left;font-size:8pt;margin-top:8px;direction:ltr">' + (record.reqType === 'emergency' ? '2000/10/1 [8-5120-2-1-001]' : '2000/10/1 [8-5120-2-1-002]') + '</div>';
+    });
+
+    htmlContent += '</body></html>';
+
+    // Create blob and download
+    var blob = new Blob(['\ufeff', htmlContent], {
+        type: 'application/msword'
+    });
+
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    var months = t('months');
+    a.download = 'OR_Export_' + currentYear + '_' + months[currentMonth] + '.doc';
+    a.click();
+    URL.revokeObjectURL(url);
+
+    showToast(t('exportWordSuccess'), 'success');
+}
+
+</script>
+</body>
+</html>
