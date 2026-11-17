@@ -1,10 +1,8 @@
-
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline';">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>OR SYSTEM</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
@@ -82,12 +80,10 @@ tr:hover td{color:#fff}
 .item-row input.center-input,.item-row select.center-select{text-align:center}
 .item-row .item-num{text-align:center}
 .item-block{background:#0d1117;border:1px solid #30363d;border-radius:6px;margin-bottom:8px;overflow:hidden}
+.item-block.item-block-empty{border-color:#e94560;box-shadow:0 0 0 3px rgba(233,69,96,0.12)}
 .desc-row{display:flex;align-items:flex-start;gap:10px;padding:8px 12px;border-top:1px solid #30363d;background:#161b22}
 .desc-label{font-size:11px;font-weight:700;color:#58a6ff;text-transform:uppercase;letter-spacing:1px;white-space:nowrap;padding-top:8px;min-width:80px}
 .desc-field{flex:1}
-.desc-select option{background:#0d1117;color:#c9d1d9}
-.desc-select option:hover{background:#e94560}
-.desc-select:focus{outline:none;border-color:#e94560}
 [dir="rtl"] .desc-row{flex-direction:row-reverse}
 [dir="rtl"] .desc-label{text-align:right}
 .btn-remove{padding:4px 8px;border:none;border-radius:4px;background:#d63031;color:white;cursor:pointer;font-size:12px}
@@ -115,6 +111,10 @@ tr:hover td{color:#fff}
 @media print{@page{margin:0;size:auto}html,body{margin:0;padding:0}body{background:white;color:black}.header,.toolbar,.months,.stats,.btn,.pagination{display:none!important}.table-wrap{border:1px solid #ccc;background:white}th{background:#f0f0f0;color:#333;border-bottom:2px solid #333}td{color:#333;border-bottom:1px solid #ddd}}
 @media(max-width:768px){.form-grid{grid-template-columns:1fr}.item-row{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,1fr)}.toolbar{flex-direction:column;align-items:stretch}.search-box{margin:0!important;width:100%}.search-input{width:100%}}
 </style>
+<base target="_blank">
+<base target="_blank">
+<base target="_blank">
+<base target="_blank">
 </head>
 <body>
 <div class="header">
@@ -334,86 +334,6 @@ tr:hover td{color:#fff}
 <div class="toast" id="toast"></div>
 
 <script>
-// ===== CAPACITOR NATIVE BRIDGE (with browser/Electron fallback) =====
-var CapPlugins = (typeof window.Capacitor !== 'undefined' && window.Capacitor.Plugins) ? window.Capacitor.Plugins : null;
-var isNative = !!CapPlugins;
-
-function blobToBase64(blob) {
-    return new Promise(function(resolve, reject) {
-        var reader = new FileReader();
-        reader.onloadend = function() {
-            var dataUrl = reader.result;
-            resolve(dataUrl.substring(dataUrl.indexOf(',') + 1));
-        };
-        reader.onerror = reject;
-        reader.readAsDataURL(blob);
-    });
-}
-
-// Save a file natively (Documents folder) then open the system share sheet.
-// Falls back to a browser download when running outside Capacitor.
-function saveAndShareFile(filename, content, mimeType) {
-    if (isNative && CapPlugins.Filesystem && CapPlugins.Share) {
-        return blobToBase64(new Blob([content], { type: mimeType || 'text/plain' }))
-            .then(function(base64) {
-                return CapPlugins.Filesystem.writeFile({
-                    path: filename,
-                    data: base64,
-                    directory: 'DOCUMENTS',
-                    recursive: true
-                });
-            })
-            .then(function(res) {
-                return CapPlugins.Share.share({ title: filename, url: res.uri });
-            })
-            .catch(function(err) {
-                console.warn('Documents save failed, trying cache', err);
-                return blobToBase64(new Blob([content], { type: mimeType || 'text/plain' }))
-                    .then(function(base64) {
-                        return CapPlugins.Filesystem.writeFile({ path: filename, data: base64, directory: 'CACHE' });
-                    })
-                    .then(function(res) {
-                        return CapPlugins.Share.share({ title: filename, url: res.uri });
-                    })
-                    .catch(function() {
-                        showToast(currentLang === 'ar' ? 'تعذر حفظ الملف' : 'Could not save file', 'error');
-                    });
-            });
-    }
-    browserDownload(filename, content, mimeType);
-    return Promise.resolve();
-}
-
-function browserDownload(filename, content, mimeType) {
-    var blob = new Blob(['\ufeff', content], { type: mimeType || 'application/octet-stream' });
-    var url = URL.createObjectURL(blob);
-    var a = document.createElement('a');
-    a.href = url;
-    a.download = filename;
-    a.click();
-    setTimeout(function() { URL.revokeObjectURL(url); }, 5000);
-}
-
-// Print via browser on desktop; on mobile save an HTML print-file and share it
-// (user picks a printer app from the system share sheet).
-function printHTMLDocument(title, bodyHtml) {
-    var printDoc = '<!DOCTYPE html><html dir="' + (currentLang === 'ar' ? 'rtl' : 'ltr') + '" lang="' + currentLang + '"><head><meta charset="UTF-8"><title>' + title + '</title>';
-    printDoc += '<style>@page { size: A4 landscape; margin: 5mm; } body { margin: 0; padding: 0; background: white; }</style>';
-    printDoc += '</head><body>' + bodyHtml + '</body></html>';
-    if (isNative) {
-        var safeName = String(title).replace(/[^\w\-\u0600-\u06FF]+/g, '_') + '.html';
-        saveAndShareFile(safeName, printDoc, 'text/html');
-        showToast(currentLang === 'ar' ? 'تم تجهيز ملف الطباعة — اختر تطبيق الطباعة من قائمة المشاركة' : 'Print file ready — pick a printer app from the share sheet', 'info');
-        return;
-    }
-    var printWindow = window.open('', '_blank');
-    printWindow.document.write(printDoc);
-    printWindow.document.close();
-    printWindow.focus();
-    setTimeout(function() { printWindow.print(); }, 500);
-}
-// =====
-
 // ===== DATALIST HELPERS =====
 function getUniqueValues(field) {
     var values = new Set();
@@ -450,23 +370,21 @@ function buildDatalist(field, selectedValue, datalistId) {
         inputClass = 'code-input';
         inputStyle = 'direction:ltr;text-align:left';
     } else if (field === 'description') {
-        // Build select dropdown with previous values + textarea below
-        var selectPlaceholder = currentLang === 'ar' ? 'اختر من القائمة...' : 'Select from list...';
-        var manualText = currentLang === 'ar' ? '── كتابة يدوية ──' : '── Type manually ──';
-        var selectStyle = 'width:100%;padding:6px 8px;font-size:12px;border:1px solid #30363d;border-radius:4px;background:#0d1117;color:#c9d1d9;box-sizing:border-box;margin-bottom:4px;cursor:pointer;';
-        var selectHtml = '<select class="desc-select" style="' + selectStyle + '">';
-        selectHtml += '<option value="">' + selectPlaceholder + '</option>';
-        values.forEach(function(val) {
-            var isSelected = (val === selectedValue) ? ' selected' : '';
-            selectHtml += '<option value="' + val + '"' + isSelected + '>' + val + '</option>';
-        });
-        selectHtml += '<option value="__custom__">' + manualText + '</option>';
-        selectHtml += '</select>';
-
+        placeholder = currentLang === 'ar' ? 'اكتب الوصف أو اختر...' : 'Type description or pick...';
+        inputClass = 'desc-input';
+        // Build textarea with suggestion dropdown (not datalist input)
         var taStyle = 'direction:ltr;text-align:left;width:100%;resize:vertical;min-height:50px;padding:8px;font-size:12px;border:1px solid #30363d;border-radius:4px;background:#0d1117;color:#c9d1d9;box-sizing:border-box;font-family:inherit;';
-        var taHtml = '<textarea class="desc-input" placeholder="' + (currentLang === 'ar' ? 'اكتب الوصف هنا...' : 'Type description here...') + '" style="' + taStyle + '" rows="2">' + (selectedValue || '') + '</textarea>';
-
-        return '<div style="width:100%;" class="desc-wrap">' + selectHtml + taHtml + '</div>';
+        var taHtml = '<textarea class="' + inputClass + '" placeholder="' + placeholder + '" style="' + taStyle + '" rows="2">' + (selectedValue || '') + '</textarea>';
+        // Suggestion dropdown (hidden by default)
+        var suggHtml = '';
+        if (values.length > 0) {
+            suggHtml = '<div class="desc-suggest-box" style="display:none;position:absolute;top:100%;left:0;right:0;z-index:100;background:#21262d;border:1px solid #e94560;border-radius:4px;max-height:150px;overflow-y:auto;box-shadow:0 4px 12px rgba(0,0,0,0.3);">';
+            values.forEach(function(val) {
+                suggHtml += '<div class="desc-suggest-item" style="padding:8px 12px;cursor:pointer;font-size:12px;color:#c9d1d9;border-bottom:1px solid #30363d;direction:ltr;text-align:left;" data-val="' + val + '">' + val + '</div>';
+            });
+            suggHtml += '</div>';
+        }
+        return '<div style="position:relative;width:100%;" class="desc-wrap">' + taHtml + suggHtml + '</div>';
     } else if (field === 'unit') {
         placeholder = currentLang === 'ar' ? 'اكتب الوحدة أو اختر...' : 'Type unit or pick...';
         inputClass = 'center-input';
@@ -745,18 +663,7 @@ var translations = {
 var currentLang = 'ar';
 
 function initLanguage() {
-    var saved = null;
-    if (!isNative) {
-        try { saved = localStorage.getItem('OR_SYSTEM_lang'); } catch (e) {}
-    }
-    if (isNative && CapPlugins.Preferences) {
-        CapPlugins.Preferences.get({ key: 'OR_SYSTEM_lang' }).then(function(res) {
-            if (res.value && translations[res.value] && res.value !== currentLang) {
-                currentLang = res.value;
-                applyLanguage();
-            }
-        });
-    }
+    var saved = localStorage.getItem('OR_SYSTEM_lang');
     if (saved && translations[saved]) {
         currentLang = saved;
     }
@@ -765,11 +672,7 @@ function initLanguage() {
 
 function toggleLanguage() {
     currentLang = currentLang === 'ar' ? 'en' : 'ar';
-    if (isNative && CapPlugins.Preferences) {
-        CapPlugins.Preferences.set({ key: 'OR_SYSTEM_lang', value: currentLang });
-    } else {
-        try { localStorage.setItem('OR_SYSTEM_lang', currentLang); } catch (e) {}
-    }
+    localStorage.setItem('OR_SYSTEM_lang', currentLang);
     applyLanguage();
 }
 
@@ -814,9 +717,17 @@ function applyLanguage() {
         });
     }
 
+    refreshDescriptionLabels();
     updateCurrentDate();
     generateMonthTabs();
     renderTable();
+}
+
+// Keep every item's DESCRIPTION caption in sync with the active language.
+function refreshDescriptionLabels() {
+    document.querySelectorAll('#itemsContainer .desc-label').forEach(function(el) {
+        el.textContent = t('description');
+    });
 }
 
 function t(key) {
@@ -856,6 +767,7 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('btnPreview').addEventListener('click', previewBeforeSave);
     document.getElementById('btnExportWord').addEventListener('click', exportCurrentToWord);
     document.getElementById('btnAddItem').addEventListener('click', function() { addItemRow(); });
+    bindItemInputTracking();
     document.getElementById('previewCloseBtn').addEventListener('click', closePreviewModal);
     document.getElementById('previewClose').addEventListener('click', closePreviewModal);
     document.getElementById('previewPrint').addEventListener('click', printA4);
@@ -900,7 +812,7 @@ document.addEventListener('DOMContentLoaded', function() {
             hasUnsavedChanges = false;
             showToast(currentLang === 'ar' ? 'تم الحفظ التلقائي (كل 5 دقائق)' : 'Auto-saved (every 5 min)', 'info');
         }
-    }, isNative ? 60000 : 300000);
+    }, 300000);
 
     // Warning before closing with unsaved changes
     window.addEventListener('beforeunload', function(e) {
@@ -971,15 +883,92 @@ function generateNextORNumber() {
     return 'OR-' + seqStr + '-' + monthStr + '-' + yearStr;
 }
 
+// True when an item block has neither a code nor a description entered.
+function isItemBlockBlank(block) {
+    if (!block) return true;
+    var code = block.querySelector('.code-input');
+    var desc = block.querySelector('textarea.desc-input');
+    var unit = block.querySelector('input[list^="unitList_"]');
+    var nums = block.querySelectorAll('input[type="number"].center-input');
+    var selects = block.querySelectorAll('select.center-select');
+    var hasText = (code && code.value.trim() !== '') ||
+                  (desc && desc.value.trim() !== '') ||
+                  (unit && unit.value.trim() !== '');
+    var hasNum = false;
+    nums.forEach(function(n) { if (n.value !== '') hasNum = true; });
+    var hasSel = false;
+    selects.forEach(function(sel) { if (sel.value !== '') hasSel = true; });
+    return !(hasText || hasNum || hasSel);
+}
+
+// Remember the last item that received input, so the empty check targets the right-one
+// even if the user goes back and fills an earlier row.
+var lastTouchedBlock = null;
+
+function bindItemInputTracking() {
+    var container = document.getElementById('itemsContainer');
+    if (!container || container.dataset.trackingBound === '1') return;
+    container.dataset.trackingBound = '1';
+    container.addEventListener('focusin', function(e) {
+        var block = e.target.closest ? e.target.closest('.item-block') : null;
+        if (block) lastTouchedBlock = block;
+    });
+    container.addEventListener('input', function(e) {
+        var block = e.target.closest ? e.target.closest('.item-block') : null;
+        if (block) {
+            lastTouchedBlock = block;
+            block.classList.remove('item-block-empty');
+        }
+    });
+}
+
+// Block a new item only when the current/last item is still completely empty.
+function canAddItemRow() {
+    var blocks = document.querySelectorAll('#itemsContainer .item-block');
+    if (blocks.length === 0) return true;
+    var last = blocks[blocks.length - 1];
+    if (isItemBlockBlank(last)) {
+        // Highlight the item that still needs data.
+        last.classList.add('item-block-empty');
+        var focusTarget = last.querySelector('.code-input') || last.querySelector('textarea.desc-input');
+        if (focusTarget) focusTarget.focus();
+        showToast(currentLang === 'ar'
+            ? 'املأ بيانات الصنف الحالي أولًا (الكود أو الوصف) قبل إضافة صنف جديد'
+            : 'Fill the current item (code or description) before adding a new one', 'error');
+        return false;
+    }
+    return true;
+}
+
+// Remove every dynamically-added item block, leaving only the static header row.
+function clearItemRows() {
+    var container = document.getElementById('itemsContainer');
+    container.querySelectorAll('.item-block').forEach(function(b) { b.remove(); });
+    container.querySelectorAll(':scope > .desc-row').forEach(function(d) { d.remove(); });
+    container.querySelectorAll(':scope > .item-row:not(.header)').forEach(function(r) { r.remove(); });
+    itemCounter = 0;
+    lastTouchedBlock = null;
+}
+
+// Keep row numbers sequential after adding/removing blocks.
+function nextItemNumber() {
+    return document.querySelectorAll('#itemsContainer .item-block').length + 1;
+}
+
 function addItemRow(data) {
     data = data || {};
-    itemCounter++;
+    // data present => restoring a saved record, never block
+    if (!data || Object.keys(data).length === 0) {
+        if (!canAddItemRow()) return;
+    }
     var container = document.getElementById('itemsContainer');
+    var num = nextItemNumber();
+    var blockId = 'itemBlock_' + Date.now() + '_' + num;
 
     // Create block wrapper
     var block = document.createElement('div');
     block.className = 'item-block';
-    block.id = 'itemBlock_' + itemCounter;
+    block.id = blockId;
 
     // Row 1: small fields (no description)
     var row = document.createElement('div');
@@ -988,9 +977,9 @@ function addItemRow(data) {
     var noText = t('no');
     var selectText = currentLang === 'ar' ? 'اختر' : 'Select';
     row.innerHTML = 
-        '<div class="item-num" style="text-align:center">' + itemCounter + '</div>' +
-        buildDatalist('code', data.code || '', 'codeList_' + itemCounter) +
-        buildDatalist('unit', data.unit || '', 'unitList_' + itemCounter) +
+        '<div class="item-num" style="text-align:center">' + num + '</div>' +
+        buildDatalist('code', data.code || '', 'codeList_' + num) +
+        buildDatalist('unit', data.unit || '', 'unitList_' + num) +
         '<input type="number" class="center-input" placeholder="' + t('approxValue') + '" value="' + (data.approxValue || '') + '" style="text-align:center">' +
         '<input type="number" class="center-input" placeholder="' + t('qty') + '" value="' + (data.qty || '') + '" style="text-align:center">' +
         '<input type="number" class="center-input" placeholder="' + t('install') + '" value="' + (data.install || '') + '" style="text-align:center">' +
@@ -1000,30 +989,38 @@ function addItemRow(data) {
         '<select class="center-select" style="padding:6px;border:1px solid #30363d;border-radius:4px;background:#0d1117;color:#c9d1d9;font-size:12px;text-align:center">' +
         '<option value="">' + selectText + '</option><option value="YES" ' + (data.spec === 'YES' ? 'selected' : '') + '>' + yesText + '</option><option value="NO" ' + (data.spec === 'NO' ? 'selected' : '') + '>' + noText + '</option>' +
         '</select>' +
-        '<button type="button" class="btn-remove" data-row-id="' + itemCounter + '">×</button>';
+        '<button type="button" class="btn-remove" data-row-id="' + blockId + '">×</button>';
 
-    // Row 2: description full width with select dropdown + textarea
+    // Row 2: description full width
     var descRow = document.createElement('div');
     descRow.className = 'desc-row';
     descRow.innerHTML = 
-        '<div class="desc-label">' + t('description') + '</div>' +
-        '<div class="desc-field">' + buildDatalist('description', data.description || '', 'descList_' + itemCounter) + '</div>';
+        '<div class="desc-label" data-desc-label="1">' + t('description') + '</div>' +
+        '<div class="desc-field">' + buildDatalist('description', data.description || '', 'descList_' + num) + '</div>';
 
     // Remove button event
     row.querySelector('.btn-remove').addEventListener('click', function() {
         removeItemRow(this.getAttribute('data-row-id'));
     });
 
-    // Description select dropdown logic: copy selected value to textarea
+    // Description dropdown logic
     var descWrap = descRow.querySelector('.desc-wrap');
     if (descWrap) {
-        var descSelect = descWrap.querySelector('.desc-select');
-        var descTa = descWrap.querySelector('textarea.desc-input');
-        if (descSelect && descTa) {
-            descSelect.addEventListener('change', function() {
-                if (this.value && this.value !== '__custom__') {
-                    descTa.value = this.value;
-                }
+        var ta = descWrap.querySelector('textarea.desc-input');
+        var suggBox = descWrap.querySelector('.desc-suggest-box');
+        if (ta && suggBox) {
+            ta.addEventListener('focus', function() {
+                suggBox.style.display = 'block';
+            });
+            ta.addEventListener('blur', function() {
+                setTimeout(function() { suggBox.style.display = 'none'; }, 200);
+            });
+            suggBox.querySelectorAll('.desc-suggest-item').forEach(function(item) {
+                item.addEventListener('mousedown', function(e) {
+                    e.preventDefault();
+                    ta.value = this.getAttribute('data-val');
+                    suggBox.style.display = 'none';
+                });
             });
         }
     }
@@ -1031,10 +1028,13 @@ function addItemRow(data) {
     block.appendChild(row);
     block.appendChild(descRow);
     container.appendChild(block);
+
+    lastTouchedBlock = block;
+    refreshDescriptionLabels();
 }
 
 function removeItemRow(id) {
-    var block = document.getElementById('itemBlock_' + id);
+    var block = document.getElementById(id) || document.getElementById('itemBlock_' + id);
     if (block) block.remove();
     renumberItems();
 }
@@ -1075,14 +1075,12 @@ function openModal(recordId) {
             if (reqTypeRadio) reqTypeRadio.checked = true;
             document.getElementById('status').value = record.status || 'pending';
 
-            var container = document.getElementById('itemsContainer');
-            var rows = container.querySelectorAll('.item-row:not(.header)');
-            rows.forEach(function(r) { r.remove(); });
-            itemCounter = 0;
+            clearItemRows();
 
-            record.items.forEach(function(item) {
+            (record.items || []).forEach(function(item) {
                 addItemRow(item);
             });
+            if (!record.items || record.items.length === 0) addItemRow();
         }
     } else {
         document.getElementById('recordForm').reset();
@@ -1091,10 +1089,7 @@ function openModal(recordId) {
         document.getElementById('costCenter').value = '00310-009-025';
         document.getElementById('originator').value = ''; populateOriginatorDatalist(); populateRequestedByDeptDatalist();
 
-        var container = document.getElementById('itemsContainer');
-        var rows = container.querySelectorAll('.item-row:not(.header)');
-        rows.forEach(function(r) { r.remove(); });
-        itemCounter = 0;
+        clearItemRows();
         addItemRow();
     }
 
@@ -1416,10 +1411,19 @@ function searchRecords() {
 
 function saveAllData() {
     var data = { records: records, exportDate: new Date().toISOString() };
-    saveToStorage();
+    try {
+        localStorage.setItem('OR_SYSTEM_records', JSON.stringify(data));
+    } catch (e) {
+        console.error('localStorage save failed:', e);
+    }
+    var blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
     var months = t('months');
-    var filename = 'OR_SYSTEM_backup_' + currentYear + '_' + months[currentMonth] + '.json';
-    saveAndShareFile(filename, JSON.stringify(data, null, 2), 'application/json');
+    a.download = 'OR_SYSTEM_backup_' + currentYear + '_' + months[currentMonth] + '.json';
+    a.click();
+    URL.revokeObjectURL(url);
     showToast(t('saveSuccess'), 'success');
 }
 
@@ -1462,13 +1466,8 @@ function clearAllData() {
 }
 
 function saveToStorage() {
-    var payload = JSON.stringify({ records: records });
-    if (isNative && CapPlugins.Preferences) {
-        CapPlugins.Preferences.set({ key: 'OR_SYSTEM_records', value: payload });
-        return true;
-    }
     try {
-        localStorage.setItem('OR_SYSTEM_records', payload);
+        localStorage.setItem('OR_SYSTEM_records', JSON.stringify({ records: records }));
         return true;
     } catch (e) {
         console.warn('LocalStorage not available');
@@ -1477,19 +1476,6 @@ function saveToStorage() {
 }
 
 function loadFromStorage() {
-    if (isNative && CapPlugins.Preferences) {
-        CapPlugins.Preferences.get({ key: 'OR_SYSTEM_records' }).then(function(res) {
-            try {
-                if (res.value) {
-                    var data = JSON.parse(res.value);
-                    if (data.records) records = data.records;
-                }
-            } catch (e) {}
-            renderTable();
-            updateStats();
-        });
-        return;
-    }
     try {
         var stored = localStorage.getItem('OR_SYSTEM_records');
         if (stored) {
@@ -1655,8 +1641,15 @@ function printRecord(id) {
     var record = records.find(function(r) { return r.id == id; });
     if (!record) return;
 
+    var printWindow = window.open('', '_blank');
     var html = generateA4HTML(record);
-    printHTMLDocument(record.orNumber, html);
+    var printDoc = '<!DOCTYPE html><html dir="' + (currentLang === 'ar' ? 'rtl' : 'ltr') + '" lang="' + currentLang + '"><head><meta charset="UTF-8"><title>' + record.orNumber + '</title>';
+    printDoc += '<style>@page { size: A4 landscape; margin: 5mm; } body { margin: 0; padding: 0; background: white; }</style>';
+    printDoc += '</head><body>' + html + '</body></html>';
+    printWindow.document.write(printDoc);
+    printWindow.document.close();
+    printWindow.focus();
+    setTimeout(function() { printWindow.print(); }, 500);
 }
 
 function previewBeforeSave() {
@@ -1699,7 +1692,14 @@ function closePreviewModal() {
 
 function printA4() {
     var content = document.getElementById('a4PreviewContent').innerHTML;
-    printHTMLDocument(currentLang === 'ar' ? 'معاينة' : 'Preview', content);
+    var printWindow = window.open('', '_blank');
+    var printDoc = '<!DOCTYPE html><html dir="' + (currentLang === 'ar' ? 'rtl' : 'ltr') + '" lang="' + currentLang + '"><head><meta charset="UTF-8"><title>' + (currentLang === 'ar' ? 'معاينة' : 'Preview') + '</title>';
+    printDoc += '<style>@page { size: A4 landscape; margin: 5mm; } body { margin: 0; padding: 0; background: white; }</style>';
+    printDoc += '</head><body>' + content + '</body></html>';
+    printWindow.document.write(printDoc);
+    printWindow.document.close();
+    printWindow.focus();
+    setTimeout(function() { printWindow.print(); }, 500);
 }
 
 function printSelected() {
@@ -1709,10 +1709,18 @@ function printSelected() {
         return;
     }
 
+    var printWindow = window.open('', '_blank');
     var allContent = filtered.map(function(r) {
         return generateA4HTML(r) + '<div style="page-break-after:always"></div>';
     }).join('');
-    printHTMLDocument(currentLang === 'ar' ? 'طباعة_الكل' : 'Print_All', allContent);
+
+    var printDoc = '<!DOCTYPE html><html dir="' + (currentLang === 'ar' ? 'rtl' : 'ltr') + '" lang="' + currentLang + '"><head><meta charset="UTF-8"><title>' + (currentLang === 'ar' ? 'طباعة الكل' : 'Print All') + '</title>';
+    printDoc += '<style>@page { size: A4 landscape; margin: 5mm; } body { margin: 0; padding: 0; background: white; }</style>';
+    printDoc += '</head><body>' + allContent + '</body></html>';
+    printWindow.document.write(printDoc);
+    printWindow.document.close();
+    printWindow.focus();
+    setTimeout(function() { printWindow.print(); }, 500);
 }
 
 
